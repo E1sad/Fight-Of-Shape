@@ -14,45 +14,38 @@ namespace SOG.Player
     [SerializeField] private Rigidbody2D _playerRb;
 
     //internal variables
-    private Location _playerLocation, _targetLocation;
+    private Location _playerLocation;
     private int _indexOfLocations;
+    private bool _isMoving;
 
     #region My Mehtods
-    private Location moveTowardsLocation(float horizontalSpeed){
-      switch (horizontalSpeed){
-        case 1: return Location.RIGHT;
-        case -1: return Location.LEFT;
-        default: return Location.NULL;
-      }
-    }
-
-    private Location currentLocation(int index){
+    private Location fromIndexToLocation(int index) { 
       switch (index){
+        case 1: return Location.CENTER;
         case 0: return Location.LEFT;
         case 2: return Location.RIGHT;
-        case 1: return Location.CENTER;
         default: return Location.NULL;
       }
     }
 
-    private int newIndex(Location loc){
-      switch (loc){
-        case Location.LEFT: return -1;
-        case Location.RIGHT: return 1;
-        default: return 0;
-      }
+    private void move(Vector3 target)
+    {
+      if (target == transform.position) { _isMoving = false; return; }
+      _isMoving = true;
+      transform.position = Vector3.MoveTowards(transform.position, target, _movementSpeed * Time.deltaTime);
     }
 
     private void playerMovement(){
+      if (_isMoving) return;
       float horizontalSpeed = Input.GetAxisRaw("Horizontal");
-      _targetLocation = moveTowardsLocation(horizontalSpeed);
-      print(_targetLocation);
-      if (_playerLocation != _targetLocation){
-        transform.position = Vector3.MoveTowards(transform.position, locations[_indexOfLocations], _movementSpeed * Time.deltaTime);
-        return;
+      if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)){
+        if(_indexOfLocations < 2) _indexOfLocations += 1;
+        _playerLocation = fromIndexToLocation(_indexOfLocations);
       }
-      _indexOfLocations += newIndex(_targetLocation);
-      _playerLocation = currentLocation(_indexOfLocations);
+      if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+        if (_indexOfLocations > 0) _indexOfLocations -= 1;
+        _playerLocation = fromIndexToLocation(_indexOfLocations);
+      }
     }
 
     #endregion
@@ -60,11 +53,14 @@ namespace SOG.Player
     #region Unity Methods
     private void Start(){
       _playerLocation = Location.CENTER;
+      _isMoving = false;
       _indexOfLocations = 1;
     }
 
     private void Update(){
       playerMovement();
+      move(locations[_indexOfLocations]);
+      print(_playerLocation);
     }
 
     #endregion
