@@ -60,7 +60,6 @@ namespace SOG.Player
     private void Update(){
       playerMovement();
       move(locations[_indexOfLocations]);
-      print(_playerLocation);
     }
 
     #endregion
