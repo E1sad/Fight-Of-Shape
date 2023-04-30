@@ -14,7 +14,7 @@ namespace SOG.Player
     [SerializeField] private Rigidbody2D _playerRb;
 
     //internal variables
-    private Location _playerLocation;
+    [HideInInspector] public Location _playerLocation { private set; get; }
     private int _indexOfLocations;
     private bool _isMoving;
 
