@@ -1,3 +1,4 @@
+using SOG.Bullet;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace SOG.Player
 
     [Header("Links")]
     [SerializeField] private Movement _playerMovement;
-    [SerializeField] private GameObject bullet;
+    [SerializeField] private BulletSpawner _spawner;
 
     //Internal varibales
     private IEnumerator _shootCoroutine;
@@ -30,7 +31,7 @@ namespace SOG.Player
     private IEnumerator shootingCoroutine(){
       while (_gameStatePlay){
         yield return new WaitForSeconds(_ShootingFrequency);
-        Instantiate(bullet, fromLocationToVector(_playerMovement._playerLocation),Quaternion.identity);
+        _spawner.Instantiate(fromLocationToVector(_playerMovement._playerLocation), Quaternion.identity);
       }
     }
 

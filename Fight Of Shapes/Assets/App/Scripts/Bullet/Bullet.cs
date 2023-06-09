@@ -1,24 +1,25 @@
 using SOG.Enemy;
 using UnityEngine;
 
-namespace SOG
+namespace SOG.Bullet
 {
   public class Bullet : MonoBehaviour
   {
     [Header("Variables")]
-    [SerializeField] private int _damage; 
     [SerializeField] private float _speed;
 
     [Header("Links")]
     [SerializeField] private Rigidbody2D _bulletRb;
 
     //Internal varibales
+    [HideInInspector] private int _damage;
     [HideInInspector] public int Damage{ get { return _damage; } set { _damage = value; }}
+    [HideInInspector] private BulletSpawner _spawner = null;
 
     #region My Methods
-    private void move(){
-      _bulletRb.velocity = new Vector2(0,_speed*Time.deltaTime);
-    }
+    private void move(){_bulletRb.velocity = new Vector2(0,_speed*Time.deltaTime);}
+    
+    public void SetBulletSpawner(BulletSpawner spawner) { _spawner = spawner; }
 
     #endregion
 
@@ -32,9 +33,9 @@ namespace SOG
     {
       if (collision.gameObject.CompareTag("Enemy")) {
         collision.gameObject.GetComponent<EnemyStats>().damage(_damage);
-        Destroy(gameObject);
+        _spawner.Destroyed(this);
       }
-      if(collision.gameObject.CompareTag("Boundary")) {Destroy(gameObject);}
+      if(collision.gameObject.CompareTag("Boundary")) { _spawner.Destroyed(this);}
     }
     #endregion
   }
