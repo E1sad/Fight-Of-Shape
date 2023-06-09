@@ -1,3 +1,4 @@
+using SOG.Enemy;
 using UnityEngine;
 
 namespace SOG
@@ -5,14 +6,14 @@ namespace SOG
   public class Bullet : MonoBehaviour
   {
     [Header("Variables")]
-    [SerializeField] private float _damage; 
+    [SerializeField] private int _damage; 
     [SerializeField] private float _speed;
 
     [Header("Links")]
     [SerializeField] private Rigidbody2D _bulletRb;
 
     //Internal varibales
-    [HideInInspector] public float Damage{ get { return _damage; } set { _damage = value; }}
+    [HideInInspector] public int Damage{ get { return _damage; } set { _damage = value; }}
 
     #region My Methods
     private void move(){
@@ -25,6 +26,15 @@ namespace SOG
     private void Update()
     {
       move();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+      if (collision.gameObject.CompareTag("Enemy")) {
+        collision.gameObject.GetComponent<EnemyStats>().damage(_damage);
+        Destroy(gameObject);
+      }
+      if(collision.gameObject.CompareTag("Boundary")) {Destroy(gameObject);}
     }
     #endregion
   }
