@@ -347,7 +347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d260dff6ccad445b8d4d8e9b62b9ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 20
+  _movementSpeed: 15
   locations:
   - {x: -1.5, y: -4, z: 0}
   - {x: 0, y: -4, z: 0}
@@ -365,7 +365,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -373,7 +373,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!4 &1072366425
 Transform:
   m_ObjectHideFlags: 0
@@ -402,7 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61bb0ecbcd7b21e4cac35f2dfc4d63be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ShootingFrequency: 1
+  _ShootingFrequency: 3
   _playerMovement: {fileID: 1072366423}
   _spawner: {fileID: 3463336738418962663}
 --- !u!114 &1072366427
@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b202cd5d6d9b4b44a87460890edebf60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 100
+  _health: 10000
   _shapes:
   - {fileID: 2121220540}
   - {fileID: 529379458}
@@ -783,7 +783,7 @@ MonoBehaviour:
   - {x: 0, y: 10, z: 0}
   - {x: 1.5, y: 10, z: 0}
   _gameStatePlay: 1
-  _frequency: 3
+  _frequency: 5
   _enemyTypes:
   - {fileID: 1053416628534207992, guid: 2b28403c5aff139408e9e4272c9e7543, type: 3}
   - {fileID: 1053416628534207992, guid: 630b346d1b6e677448ce7415952bcdd4, type: 3}

@@ -54,6 +54,7 @@ namespace SOG.Enemy
     }
 
     public void Destroyed(EnemyStats enemy){
+      Debug.Log("Alma");
       enemy.gameObject.SetActive(false); _enemies.Add(enemy.gameObject);
     }
 

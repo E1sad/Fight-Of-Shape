@@ -31,10 +31,11 @@ namespace SOG.Bullet
         bullet.SetActive(false);
         bullet.GetComponent<Bullet>().SetBulletSpawner(this);
         _bulletList.Add(bullet);
-        if(random.Next(4) == 0){
+        if(random.Next(6) == 0){
           bullet.GetComponent<SpriteRenderer>().color = Color.red;
           bullet.GetComponent<Bullet>().Damage = random.Next(_criticalDamageMin, _criticalDamageMax);}
-        else{bullet.GetComponent<Bullet>().Damage = _ordinaryDamage;}
+        else{bullet.GetComponent<Bullet>().Damage = _ordinaryDamage;
+          bullet.GetComponent<SpriteRenderer>().color = Color.white; }
         yield return new WaitForSeconds(0.1f);
       }
     }

@@ -17,6 +17,10 @@ namespace SOG.Player
     [HideInInspector] public Location _playerLocation { private set; get; }
     private int _indexOfLocations;
     private bool _isMoving;
+    private bool _isRightSwipe;
+    private bool _isLeftSwipe;
+    private Vector2 _touchStartPos;
+    private Vector2 _touchEndPos;
 
     #region My Mehtods
     private Location fromIndexToLocation(int index) { 
@@ -30,21 +34,33 @@ namespace SOG.Player
 
     private void move(Vector3 target)
     {
-      if (target == transform.position) { _isMoving = false; return; }
+      if (target.x == transform.position.x) { _isMoving = false; return; }
       _isMoving = true;
       transform.position = Vector3.MoveTowards(transform.position, target, _movementSpeed * Time.deltaTime);
     }
 
     private void playerMovement(){
       if (_isMoving) return;
-      float horizontalSpeed = Input.GetAxisRaw("Horizontal");
-      if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)){
+      if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow) || _isRightSwipe){
         if(_indexOfLocations < 2) _indexOfLocations += 1;
         _playerLocation = fromIndexToLocation(_indexOfLocations);
+        _isRightSwipe = false;
       }
-      if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+      if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow) || _isLeftSwipe) {
         if (_indexOfLocations > 0) _indexOfLocations -= 1;
         _playerLocation = fromIndexToLocation(_indexOfLocations);
+        _isLeftSwipe = false;
+      }
+    }
+
+    private void Swipe(){
+      if (Input.touchCount > 0){
+        if(Input.GetTouch(0).phase == TouchPhase.Began) _touchStartPos = Input.GetTouch(0).position;
+        if (Input.GetTouch(0).phase == TouchPhase.Ended) { 
+          _touchEndPos = Input.GetTouch(0).position;
+          if (_touchStartPos.x - _touchEndPos.x > 50) _isLeftSwipe = true;
+          if (_touchStartPos.x - _touchEndPos.x < -50)  _isRightSwipe = true;
+        }
       }
     }
 
@@ -55,11 +71,15 @@ namespace SOG.Player
       _playerLocation = Location.CENTER;
       _isMoving = false;
       _indexOfLocations = 1;
+      _isLeftSwipe = false;
+      _isRightSwipe = false;
+      Application.targetFrameRate = 60; //Temporary
     }
 
     private void Update(){
       playerMovement();
       move(locations[_indexOfLocations]);
+      Swipe();
     }
 
     #endregion

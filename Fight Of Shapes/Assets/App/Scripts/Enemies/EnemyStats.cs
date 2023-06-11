@@ -10,6 +10,7 @@ namespace SOG.Enemy
     [SerializeField] private int _damageOfHit;
     [SerializeField] private int _corner;
     [HideInInspector] public int Corner { get { return _corner; } set { }}
+    
 
     /*[Header("Links")]*/
     //Internal varibales
