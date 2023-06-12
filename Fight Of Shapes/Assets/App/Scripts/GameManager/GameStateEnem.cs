@@ -1,0 +1,1 @@
+public enum GameState { PLAY_STATE, PAUSE_STATE, RESTART_STATE, IDLE_STATE }

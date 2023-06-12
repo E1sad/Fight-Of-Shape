@@ -1,3 +1,4 @@
+using SOG.Game_Manager;
 using UnityEngine;
 
 namespace SOG.Enemy
@@ -5,21 +6,45 @@ namespace SOG.Enemy
   public class EnemyMovement : MonoBehaviour
   {
     [Header("Variables")]
-    [SerializeField] private float speed;
+    [SerializeField] private float _speed;
 
     [Header("Links")]
-    [SerializeField] private Rigidbody2D enemyRb;
+    [SerializeField] private Rigidbody2D _enemyRb;
 
     //Internal varibales
+    [HideInInspector] public Rigidbody2D EnemyRb { get { return _enemyRb; } set { } }
+    private bool _isGamePlayState;
 
     #region My Methods
-    public void SetSpeed(float _speed) { speed = _speed; }
+    private void gameStateHandler(object sender, GameStateChangedEvent eventargs){
+      switch (eventargs.CurrentGameState){
+        case GameState.IDLE_STATE: restartAndIdleState(); break;
+        case GameState.RESTART_STATE: restartAndIdleState(); break;
+        case GameState.PAUSE_STATE: pauseState(); break;
+        case GameState.PLAY_STATE: gamePlayState(); break;
+        default: break;}
+    }
+
+    private void restartAndIdleState(){_isGamePlayState = false;}
+    private void pauseState(){_isGamePlayState = false;}
+    private void gamePlayState(){_isGamePlayState = true;}
+
+    public void SetSpeed(float _speed) { this._speed = _speed; }
     #endregion
 
     #region Unity's Methods
-    private void Update()
-    {
-      enemyRb.velocity = Vector2.up * (-speed)* Time.deltaTime;
+    private void Update(){
+      if (!_isGamePlayState) return;
+      _enemyRb.velocity = Vector2.up * (-_speed)* Time.deltaTime; 
+    }
+    private void Start(){
+      _isGamePlayState = true;
+    }
+    private void OnEnable(){
+      GameStateEvents.OnGameStateChanged += gameStateHandler;
+    }
+    private void OnDisable(){
+      GameStateEvents.OnGameStateChanged -= gameStateHandler;
     }
     #endregion
   }
