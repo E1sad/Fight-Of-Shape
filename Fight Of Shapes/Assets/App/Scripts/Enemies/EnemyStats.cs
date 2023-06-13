@@ -9,11 +9,13 @@ namespace SOG.Enemy
     [SerializeField] private int _health;
     [SerializeField] private int _damageOfHit;
     [SerializeField] private int _corner;
+    [SerializeField] private int _scorePointOfEnemy;
     [HideInInspector] public int Corner { get { return _corner; } set { }}
     
     #region My Methods
     public void damage(int damageOfHit){
-      if (_health - damageOfHit <= 0) dead();
+      if (_health - damageOfHit <= 0) {
+        SOG.UI.GamePlay.AddScoreEvent.Raise(_scorePointOfEnemy); dead(); }
       _health -= damageOfHit;
     }
     private void dead(){DestroyEnemyEvent.Raise(this,new DestroyEnemyEventArgs(this));}

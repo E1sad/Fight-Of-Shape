@@ -60,9 +60,9 @@ namespace SOG.Player
 
     #region Unity's Methods
     private void Start(){
-      _isGamePlayState = true; // when Menu impliment you should change that
+      //_isGamePlayState = false; // when Menu impliment you should change that
       _shootCoroutine = shootingCoroutine();
-      StartCoroutine(_shootCoroutine);
+      //StartCoroutine(_shootCoroutine);
       _isInvokeCompleted = true;
     }
     private void OnEnable(){

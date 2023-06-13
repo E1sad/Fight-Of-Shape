@@ -62,8 +62,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 150
-  _damageOfHit: 100
+  _damageOfHit: 1
   _corner: 3
+  _scorePointOfEnemy: 15
 --- !u!212 &1053416628534207988
 SpriteRenderer:
   m_ObjectHideFlags: 0

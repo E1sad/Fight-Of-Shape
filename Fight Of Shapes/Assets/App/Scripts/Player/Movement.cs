@@ -1,4 +1,5 @@
 using SOG.Game_Manager;
+using SOG.UI.MainMenu;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -81,7 +82,7 @@ namespace SOG.Player
       _indexOfLocations = 1;
       _isLeftSwipe = false;
       _isRightSwipe = false;
-      _isGamePlayState = true;
+      _isGamePlayState = false;
     }
     private void Update(){
       if (!_isGamePlayState) return;
@@ -91,9 +92,11 @@ namespace SOG.Player
     }
     private void OnEnable(){
       GameStateEvents.OnGameStateChanged += gameStateHandler;
+      PlayButtonPressedEvent.OnPlayButtonPressedEvent += gamePlayState;
     }
     private void OnDisable(){
       GameStateEvents.OnGameStateChanged -= gameStateHandler;
+      PlayButtonPressedEvent.OnPlayButtonPressedEvent -= gamePlayState;
     }
     #endregion
   }

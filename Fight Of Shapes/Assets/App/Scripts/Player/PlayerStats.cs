@@ -1,4 +1,5 @@
 using SOG.Bullet;
+using SOG.UI.GamePlay;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,17 +19,17 @@ namespace SOG.Player
     {
       if ((_health - damageOfHit) <= 0) dead();
       _health -= damageOfHit;
+      DamagedPlayerHealhtEvent.Raise(_health);
     }
 
-    private void dead()
-    {
-      Debug.Log("Player is dead!");
-    }
+    private void dead(){ DamagedPlayerHealhtEvent.Raise(0);}
 
     #endregion
 
     #region Unity's Methods
-
+    private void Start(){
+      DamagedPlayerHealhtEvent.Raise(_health);
+    }
     #endregion
   }
 }

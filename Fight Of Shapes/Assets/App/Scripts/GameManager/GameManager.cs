@@ -1,3 +1,7 @@
+using SOG.UI.GameOver;
+using SOG.UI.GamePlay;
+using SOG.UI.MainMenu;
+using SOG.UI.Pause;
 using UnityEngine;
 
 namespace SOG.Game_Manager
@@ -33,6 +37,28 @@ namespace SOG.Game_Manager
         _currentGameState = GameState.PLAY_STATE;
         GameStateEvents.Raise(this, _currentGameState,false);}
     }
+    private void playButtonPressedEventHandler(){
+      _currentGameState = GameState.PLAY_STATE;
+      GamePlayState(_currentGameState);
+    }
+    private void pauseButtonPressedEventHandler(){
+      _currentGameState = GameState.PAUSE_STATE;
+      GamePlayState(_currentGameState);
+    }
+    private void OnMainMenuButtonPressedEventHandler(){
+      _currentGameState = GameState.RESTART_STATE;
+      GamePlayState(_currentGameState);
+    }
+    private void OnRestartButtonPressedHandler(bool isFromPause){
+      _currentGameState = GameState.RESTART_STATE;
+      GamePlayState(_currentGameState);
+      _currentGameState = GameState.PLAY_STATE;
+      GamePlayState(_currentGameState);
+    }
+    private void EventGameOverHandler(){
+      _currentGameState = GameState.PAUSE_STATE;
+      GamePlayState(_currentGameState);
+    }
     #endregion
 
     #region Unity's Methods
@@ -41,8 +67,22 @@ namespace SOG.Game_Manager
     }
     private void Start(){
       Application.targetFrameRate = 60;
-      _currentGameState = GameState.PLAY_STATE;
-      _isPauesed = false; //Temporary untill menu UI compeleted
+      _currentGameState = GameState.PAUSE_STATE;
+      _isPauesed = false;
+    }
+    private void OnEnable(){
+      PlayButtonPressedEvent.OnPlayButtonPressedEvent += playButtonPressedEventHandler;
+      PauseButtonPressedEvent.OnPauseButtonPressedEvent += pauseButtonPressedEventHandler;
+      MainMenuButtonPressedEvent.OnMainMenuButtonPressedEvent += OnMainMenuButtonPressedEventHandler;
+      RestartButtonPressedEvent.OnRestartButtonPressed += OnRestartButtonPressedHandler;
+      GameOverEvent.EventGameOver += EventGameOverHandler;
+    }
+    private void OnDisable(){
+      PlayButtonPressedEvent.OnPlayButtonPressedEvent -= playButtonPressedEventHandler;
+      PauseButtonPressedEvent.OnPauseButtonPressedEvent -= pauseButtonPressedEventHandler;
+      MainMenuButtonPressedEvent.OnMainMenuButtonPressedEvent -= OnMainMenuButtonPressedEventHandler;
+      RestartButtonPressedEvent.OnRestartButtonPressed -= OnRestartButtonPressedHandler;
+      GameOverEvent.EventGameOver -= EventGameOverHandler;
     }
     #endregion
   }

@@ -1,4 +1,5 @@
 using SOG.Game_Manager;
+using SOG.UI.MainMenu;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -61,7 +62,7 @@ namespace SOG.Enemy
       _sendableEnemiesList.Add(enemy.gameObject);
     }
     private void startCoroutineSendEnemies(){StartCoroutine(_sendEnemies);}
-    private void stopCoroutineSendEnemies() { StopCoroutine(_sendEnemies);}
+    private void stopCoroutineSendEnemies(){StopCoroutine(_sendEnemies);}
     private void gameStateHandler(object sender, GameStateChangedEvent eventargs){
       switch (eventargs.CurrentGameState){
         case GameState.IDLE_STATE: restartAndIdleState(); break;
@@ -75,7 +76,7 @@ namespace SOG.Enemy
         _enemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Dynamic;}
       _gameStatePlay = true;
       if (_isInvokeCompleted){
-        Invoke("startCoroutineSendEnemies", _frequency); _isInvokeCompleted = false;}
+        Invoke("alternativeStartCoroutine", _frequency); _isInvokeCompleted = false;}
     }
     private void pauseState(){
       _gameStatePlay = false;
@@ -93,7 +94,7 @@ namespace SOG.Enemy
     private void DestroyEnemeyEventHandler(object sender, DestroyEnemyEventArgs eventArgs) {
       destroyed(eventArgs.ThisEnemy);
     }
-    private void alternativeStartCoroutine() { startCoroutineSendEnemies(); _isInvokeCompleted = true; }
+    private void alternativeStartCoroutine() { _isInvokeCompleted = true; startCoroutineSendEnemies();}
     #endregion
 
     #region Unity's Methods
@@ -105,16 +106,18 @@ namespace SOG.Enemy
       _instantiateEnemies = instantiateEnemies();
       _sendEnemies = sendEnemies();
       StartCoroutine(_instantiateEnemies);
-      Invoke("startCoroutineSendEnemies", 3f);
+      //Invoke("startCoroutineSendEnemies", 3f);
       _isInvokeCompleted = true;
     }
     private void OnEnable(){
       GameStateEvents.OnGameStateChanged += gameStateHandler;
       DestroyEnemyEvent.EventDestroyEnemy += DestroyEnemeyEventHandler;
+      //PlayButtonPressedEvent.OnPlayButtonPressedEvent += gamePlayState;
     }
     private void OnDisable(){
       GameStateEvents.OnGameStateChanged -= gameStateHandler;
       DestroyEnemyEvent.EventDestroyEnemy -= DestroyEnemeyEventHandler;
+      //PlayButtonPressedEvent.OnPlayButtonPressedEvent -= gamePlayState;
     }
     #endregion
   }
