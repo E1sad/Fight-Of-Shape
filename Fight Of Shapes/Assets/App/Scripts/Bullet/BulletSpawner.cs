@@ -58,12 +58,12 @@ namespace SOG.Bullet{
         case GameState.PAUSE_STATE: pauseState(); break;}
     }
     private void pauseState(){
-      for (int i = 0; i < _bulletList.Count; i++){
-        _bulletList[i].GetComponent<Bullet>().BulletRb.bodyType = RigidbodyType2D.Static;}
+      for (int i = 0; i < _throwedBulletList.Count; i++){
+        _throwedBulletList[i].GetComponent<Bullet>().BulletRb.bodyType = RigidbodyType2D.Static;}
     }
     private void playGameState(){
-      for (int i = 0; i < _bulletList.Count; i++){
-        _bulletList[i].GetComponent<Bullet>().BulletRb.bodyType = RigidbodyType2D.Dynamic;}
+      for (int i = 0; i < _throwedBulletList.Count; i++){
+        _throwedBulletList[i].GetComponent<Bullet>().BulletRb.bodyType = RigidbodyType2D.Dynamic;}
     }
     private void restartAndIdleGameState(){
       for (int i = 0; i < _bulletList.Count; i++){

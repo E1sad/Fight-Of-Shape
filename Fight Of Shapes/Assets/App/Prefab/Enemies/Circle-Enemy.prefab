@@ -47,8 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24ba6fcae4505fa4797259482ab877f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 300
+  _speed: 150
   _enemyRb: {fileID: 1053416628534207993}
+  _isGamePlayState: 0
 --- !u!114 &1053416628534207990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,10 +62,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e66f1e59cc98338428402764b8c9405a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 100
+  _health: 10
   _damageOfHit: 1
   _corner: 0
   _scorePointOfEnemy: 5
+  _healthRemainder: 0
 --- !u!212 &1053416628534207988
 SpriteRenderer:
   m_ObjectHideFlags: 0

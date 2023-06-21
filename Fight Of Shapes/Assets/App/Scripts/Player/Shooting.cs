@@ -15,22 +15,21 @@ namespace SOG.Player
     [SerializeField] private Movement _playerMovement;
 
     //Internal varibales
-    private IEnumerator _shootCoroutine;
+    private Coroutine _routine;
     private bool _isGamePlayState;
-    private bool _isInvokeCompleted;
 
     #region My Methods
     private Vector3 fromLocationToVector(Location loc){
       switch (loc){
-        case Location.LEFT: return new Vector3(-1.5f, -4, 0);
-        case Location.CENTER: return new Vector3(0, -4, 0);
-        case Location.RIGHT: return new Vector3(1.5f, -4, 0);
+        case Location.LEFT: return new Vector3(-1.5f, -3.34f, 0);
+        case Location.CENTER: return new Vector3(0, -3.34f, 0);
+        case Location.RIGHT: return new Vector3(1.5f, -3.34f, 0);
         default: return new Vector3(10,10,0);}
     }
     private IEnumerator shootingCoroutine(){
       while (_isGamePlayState){
-        yield return new WaitForSecondsRealtime(_ShootingFrequency);
-        SpawnBulletEvent.Raise(this, 
+        yield return new WaitForSeconds(_ShootingFrequency);
+        SpawnBulletEvent.Raise(this,
           new SpawnBulletEventArgs(fromLocationToVector(_playerMovement._playerLocation), Quaternion.identity));}
     }
     private void gameStateHandler(object sender, GameStateChangedEvent eventargs){
@@ -41,30 +40,16 @@ namespace SOG.Player
         case GameState.PLAY_STATE: gamePlayState(); break;
         default: break;}
     }
-    private void restartAndIdleState() { 
-      _isGamePlayState = false;
-      StopCoroutine(_shootCoroutine);
+    private void restartAndIdleState() {_isGamePlayState = true; stopCoroutine();}
+    private void pauseState() { _isGamePlayState = false; stopCoroutine();}
+    private void gamePlayState() {_isGamePlayState = true; startCoroutine();}
+    private void startCoroutine() { 
+      if (_routine != null) StopCoroutine(_routine); _routine = StartCoroutine(shootingCoroutine());
     }
-    private void pauseState() { 
-      _isGamePlayState = false;
-      StopCoroutine(_shootCoroutine); 
-    }
-    private void gamePlayState() { 
-      _isGamePlayState = true;
-      StopCoroutine(_shootCoroutine);
-      if (_isInvokeCompleted){
-        _isInvokeCompleted = false; Invoke("alternativeStartCoroutine", _ShootingFrequency);}
-    }
-    private void alternativeStartCoroutine(){ StartCoroutine(_shootCoroutine); _isInvokeCompleted = true; }
+    private void stopCoroutine() { if(_routine != null) StopCoroutine(_routine); _routine = null; }
     #endregion
 
     #region Unity's Methods
-    private void Start(){
-      //_isGamePlayState = false; // when Menu impliment you should change that
-      _shootCoroutine = shootingCoroutine();
-      //StartCoroutine(_shootCoroutine);
-      _isInvokeCompleted = true;
-    }
     private void OnEnable(){
       GameStateEvents.OnGameStateChanged += gameStateHandler;
     }

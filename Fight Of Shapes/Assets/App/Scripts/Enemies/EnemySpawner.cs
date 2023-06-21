@@ -21,8 +21,8 @@ namespace SOG.Enemy
     private List<GameObject> _sendableEnemiesList;
     private List<GameObject> _enemiesList;
     private List<GameObject> _sendedEnemiesList;
-    private IEnumerator _instantiateEnemies, _sendEnemies;
-    private bool _isInvokeCompleted;
+    private IEnumerator _instantiateEnemies;
+    private Coroutine _routineSendEnemise;
 
     #region My Methods
     private IEnumerator instantiateEnemies(){
@@ -36,6 +36,7 @@ namespace SOG.Enemy
     }
     private IEnumerator sendEnemies()
     {while (_gameStatePlay){
+        yield return new WaitForSeconds(_frequency);
         GameObject selectedEnemy = null;
         int random = _random.Next(0, 100);
         if ( random % 6 == 0)
@@ -53,16 +54,13 @@ namespace SOG.Enemy
         if (selectedEnemy == null) continue;
         selectedEnemy.transform.position = _locations[_random.Next(0, 3)];
         selectedEnemy.SetActive(true);
-        _sendedEnemiesList.Add(selectedEnemy);
-        yield return new WaitForSeconds(_frequency);}
+        _sendedEnemiesList.Add(selectedEnemy);}
     }
     private void destroyed(EnemyStats enemy){
       enemy.gameObject.SetActive(false);
       _sendedEnemiesList.RemoveAll(Enemy => Enemy == enemy.gameObject);
       _sendableEnemiesList.Add(enemy.gameObject);
     }
-    private void startCoroutineSendEnemies(){StartCoroutine(_sendEnemies);}
-    private void stopCoroutineSendEnemies(){StopCoroutine(_sendEnemies);}
     private void gameStateHandler(object sender, GameStateChangedEvent eventargs){
       switch (eventargs.CurrentGameState){
         case GameState.IDLE_STATE: restartAndIdleState(); break;
@@ -72,21 +70,17 @@ namespace SOG.Enemy
         default: break;}
     }
     private void gamePlayState() {
-      for (int i = 0; i < _enemiesList.Count; i++){
-        _enemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Dynamic;}
-      _gameStatePlay = true;
-      if (_isInvokeCompleted){
-        Invoke("alternativeStartCoroutine", _frequency); _isInvokeCompleted = false;}
+      for (int i = 0; i < _sendedEnemiesList.Count; i++){
+        _sendedEnemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Dynamic;}
+      _gameStatePlay = true; startSendEnemiesCoroutine();
     }
     private void pauseState(){
-      _gameStatePlay = false;
-      stopCoroutineSendEnemies();
-      for (int i = 0; i < _enemiesList.Count; i++){
-        _enemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Static;}
+      _gameStatePlay = false; stopSendEnemiesCoroutine();
+      for (int i = 0; i < _sendedEnemiesList.Count; i++){
+        _sendedEnemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Static;}
     }
     private void restartAndIdleState(){
-      _gameStatePlay = false;
-      stopCoroutineSendEnemies();
+      _gameStatePlay = false; stopSendEnemiesCoroutine();
       for (int i = 0; i < _enemiesList.Count; i++){ _enemiesList[i].SetActive(false);}
       for (int i = 0; i < _sendedEnemiesList.Count; i++) {
         _sendableEnemiesList.Add(_sendedEnemiesList[0]); _sendedEnemiesList.RemoveAt(0);}
@@ -94,7 +88,14 @@ namespace SOG.Enemy
     private void DestroyEnemeyEventHandler(object sender, DestroyEnemyEventArgs eventArgs) {
       destroyed(eventArgs.ThisEnemy);
     }
-    private void alternativeStartCoroutine() { _isInvokeCompleted = true; startCoroutineSendEnemies();}
+    private void startSendEnemiesCoroutine() { 
+      if (_routineSendEnemise != null) StopCoroutine(_routineSendEnemise);
+      _routineSendEnemise = StartCoroutine(sendEnemies());
+    }
+    private void stopSendEnemiesCoroutine(){
+      if (_routineSendEnemise != null) StopCoroutine(_routineSendEnemise);
+      _routineSendEnemise = null;
+    }
     #endregion
 
     #region Unity's Methods
@@ -104,10 +105,7 @@ namespace SOG.Enemy
       _sendedEnemiesList = new List<GameObject>();
       _enemiesList = new List<GameObject>();
       _instantiateEnemies = instantiateEnemies();
-      _sendEnemies = sendEnemies();
       StartCoroutine(_instantiateEnemies);
-      //Invoke("startCoroutineSendEnemies", 3f);
-      _isInvokeCompleted = true;
     }
     private void OnEnable(){
       GameStateEvents.OnGameStateChanged += gameStateHandler;

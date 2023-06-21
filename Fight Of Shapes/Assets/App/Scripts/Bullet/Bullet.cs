@@ -28,7 +28,7 @@ namespace SOG.Bullet
         case GameState.PLAY_STATE: gamePlayState(); break;
         default: break;}
     }
-    private void restartAndIdleState() { _isGamePlayState = false; }
+    private void restartAndIdleState() { _isGamePlayState = true; }
     private void pauseState() { _isGamePlayState = false; }
     private void gamePlayState() { _isGamePlayState = true; }
     public void SetIsGamePlayState(bool set) { _isGamePlayState = set; }

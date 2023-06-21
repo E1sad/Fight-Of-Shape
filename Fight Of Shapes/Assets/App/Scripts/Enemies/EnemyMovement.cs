@@ -13,7 +13,8 @@ namespace SOG.Enemy
 
     //Internal varibales
     [HideInInspector] public Rigidbody2D EnemyRb { get { return _enemyRb; } set { } }
-    private bool _isGamePlayState;
+    [SerializeField] private bool _isGamePlayState;
+    private GameState state;
 
     #region My Methods
     private void gameStateHandler(object sender, GameStateChangedEvent eventargs){
@@ -25,7 +26,7 @@ namespace SOG.Enemy
         default: break;}
     }
 
-    private void restartAndIdleState(){_isGamePlayState = false;}
+    private void restartAndIdleState(){_isGamePlayState = true;}
     private void pauseState(){_isGamePlayState = false;}
     private void gamePlayState(){_isGamePlayState = true;}
 

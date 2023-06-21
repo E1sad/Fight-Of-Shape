@@ -52,8 +52,7 @@ namespace SOG.Game_Manager
     private void OnRestartButtonPressedHandler(bool isFromPause){
       _currentGameState = GameState.RESTART_STATE;
       GamePlayState(_currentGameState);
-      _currentGameState = GameState.PLAY_STATE;
-      GamePlayState(_currentGameState);
+      Invoke("playButtonPressedEventHandler", 0.1f);
     }
     private void EventGameOverHandler(){
       _currentGameState = GameState.PAUSE_STATE;

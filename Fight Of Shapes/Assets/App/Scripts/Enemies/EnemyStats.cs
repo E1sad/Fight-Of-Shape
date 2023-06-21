@@ -11,14 +11,17 @@ namespace SOG.Enemy
     [SerializeField] private int _corner;
     [SerializeField] private int _scorePointOfEnemy;
     [HideInInspector] public int Corner { get { return _corner; } set { }}
-    
+
+    //Internal varibales
+    [SerializeField] private int _healthRemainder;
+
     #region My Methods
     public void damage(int damageOfHit){
       if (_health - damageOfHit <= 0) {
         SOG.UI.GamePlay.AddScoreEvent.Raise(_scorePointOfEnemy); dead(); }
-      _health -= damageOfHit;
+      else _health -= damageOfHit;
     }
-    private void dead(){DestroyEnemyEvent.Raise(this,new DestroyEnemyEventArgs(this));}
+    private void dead() { _health = _healthRemainder; DestroyEnemyEvent.Raise(this,new DestroyEnemyEventArgs(this));}
     #endregion
 
     #region Unity's Methods
@@ -27,6 +30,9 @@ namespace SOG.Enemy
         collision.gameObject.GetComponent<PlayerStats>().damage(_damageOfHit);
         dead();}
       if (collision.gameObject.CompareTag("Boundary")) { dead(); }
+    }
+    private void Start(){
+      _healthRemainder = _health;
     }
     #endregion
   }
