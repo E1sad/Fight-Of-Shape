@@ -18,10 +18,9 @@ namespace SOG.Player
     public void damage(int damageOfHit)
     {
       if ((_health - damageOfHit) <= 0) dead();
-      _health -= damageOfHit;
-      DamagedPlayerHealhtEvent.Raise(_health);
+      else { _health -= damageOfHit; DamagedPlayerHealhtEvent.Raise(_health);
+        Camera.ShakeCameraEvent.Raise(this, new Camera.CameraShakerEventArg(.2f, .1f));}
     }
-
     private void dead(){ DamagedPlayerHealhtEvent.Raise(0);}
 
     #endregion

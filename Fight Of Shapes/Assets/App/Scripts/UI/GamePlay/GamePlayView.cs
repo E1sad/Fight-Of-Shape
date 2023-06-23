@@ -19,7 +19,11 @@ namespace SOG.UI.GamePlay
 
     #region My Methods
     public void OnPauseButtonPressed() { controller.PauseButtonPressed();}
-    public void AddScore(int score) { _score += score; _scoreText.text = Convert.ToString(_score); }
+    public void AddScore(int score) {
+      if ((_score + score) <= 0) { SetScore(0); _score = 0; }
+      else _score += score; 
+      _scoreText.text = Convert.ToString(_score); 
+    }
     public void SetScore(int score) { _score = score; _scoreText.text = Convert.ToString(_score); }
     public void DamagedHealth(int health) { _health = health; _HealhtPlaceHolder.text = "" + _health; }
     #endregion

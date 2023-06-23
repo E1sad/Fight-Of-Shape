@@ -1,5 +1,7 @@
 using SOG.Player;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SOG.Enemy
 {
@@ -10,18 +12,38 @@ namespace SOG.Enemy
     [SerializeField] private int _damageOfHit;
     [SerializeField] private int _corner;
     [SerializeField] private int _scorePointOfEnemy;
-    [HideInInspector] public int Corner { get { return _corner; } set { }}
+    [SerializeField] private int _punishScorePointOfEnemy;
+    [SerializeField] private float _duration;
+    [SerializeField] private float _magnitude;
+
+    [Header("Links")]
+    [SerializeField] private Slider _healthBar;
 
     //Internal varibales
-    [SerializeField] private int _healthRemainder;
-
+    private int _healthRemainder;
+    [HideInInspector] public int Corner { get { return _corner; } set { } }
+    
     #region My Methods
     public void damage(int damageOfHit){
-      if (_health - damageOfHit <= 0) {
-        SOG.UI.GamePlay.AddScoreEvent.Raise(_scorePointOfEnemy); dead(); }
-      else _health -= damageOfHit;
+      if (_health - damageOfHit <= 0){
+        _healthBar.value = 0; UI.GamePlay.AddScoreEvent.Raise(_scorePointOfEnemy); dead();}
+      else { _health -= damageOfHit; StartCoroutine(ShakeEnemy()); }
+      _healthBar.value = (float)_health/ _healthRemainder;
     }
-    private void dead() { _health = _healthRemainder; DestroyEnemyEvent.Raise(this,new DestroyEnemyEventArgs(this));}
+    private void dead() { 
+      _health = _healthRemainder; _healthBar.value = 1;
+      DestroyEnemyEvent.Raise(this,new DestroyEnemyEventArgs(this));
+    }
+    private IEnumerator ShakeEnemy(){
+      float original_x = gameObject.transform.position.x;
+      float elapsed = 0f;
+      while (elapsed < _duration) {
+        float x = Random.Range(-1f, 1f) * _magnitude;
+        transform.position = new Vector3(original_x + x, transform.position.y,transform.position.z);
+        elapsed += Time.deltaTime;
+        yield return null;}
+      transform.position = new Vector3(original_x, transform.position.y, transform.position.z);
+    }
     #endregion
 
     #region Unity's Methods
@@ -29,7 +51,8 @@ namespace SOG.Enemy
       if (collision.gameObject.CompareTag("Player")){
         collision.gameObject.GetComponent<PlayerStats>().damage(_damageOfHit);
         dead();}
-      if (collision.gameObject.CompareTag("Boundary")) { dead(); }
+      if (collision.gameObject.CompareTag("Boundary")) { dead(); 
+        UI.GamePlay.AddScoreEvent.Raise(_punishScorePointOfEnemy);}
     }
     private void Start(){
       _healthRemainder = _health;
