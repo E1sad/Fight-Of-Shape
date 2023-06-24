@@ -12,6 +12,10 @@ namespace SOG.Enemy
     [SerializeField] private Vector3[] _locations;
     [SerializeField] private bool _gameStatePlay;
     [SerializeField] private float _frequency;
+    [SerializeField] private int _hexagonChance;
+    [SerializeField] private int _pentagonChance;
+    [SerializeField] private int _squareChance;
+    [SerializeField] private int _triangleChance;
 
     [Header("Links")]
     [SerializeField] private GameObject[] _enemyTypes;
@@ -23,6 +27,7 @@ namespace SOG.Enemy
     private List<GameObject> _sendedEnemiesList;
     private IEnumerator _instantiateEnemies;
     private Coroutine _routineSendEnemise;
+    private int _hardnessCounter;
 
     #region My Methods
     private IEnumerator instantiateEnemies(){
@@ -36,24 +41,25 @@ namespace SOG.Enemy
     }
     private IEnumerator sendEnemies()
     {while (_gameStatePlay){
-        yield return new WaitForSeconds(_frequency);
+        yield return new WaitForSeconds(_frequency-(float)((_hardnessCounter/10)*0.1));
         GameObject selectedEnemy = null;
+        int selectedCornerNumber = 0;
         int random = _random.Next(0, 100);
-        if ( random % 6 == 0)
-        {for (int i = 0; i < _sendableEnemiesList.Count; i++)
-          {if (_sendableEnemiesList[i].GetComponent<EnemyStats>().Corner == 4)
-            {selectedEnemy = _sendableEnemiesList[i]; _sendableEnemiesList.RemoveAt(i); break;}}}
-        else if(random % 3 == 0)
-        {for (int i = 0; i < _sendableEnemiesList.Count; i++)
-          {if (_sendableEnemiesList[i].GetComponent<EnemyStats>().Corner == 3)
-            { selectedEnemy = _sendableEnemiesList[i]; _sendableEnemiesList.RemoveAt(i); break; }}}
-        else
-        {for (int i = 0; i < _sendableEnemiesList.Count; i++)
-          {if (_sendableEnemiesList[i].GetComponent<EnemyStats>().Corner == 0)
-            { selectedEnemy = _sendableEnemiesList[i]; _sendableEnemiesList.RemoveAt(i); break; }}}
+        if (random < _hexagonChance + (_hardnessCounter / 5)) selectedCornerNumber = 6;
+        else if (random>=_hexagonChance+(_hardnessCounter/5)&&random<_pentagonChance+(_hardnessCounter/5))
+          selectedCornerNumber = 5;
+        else if (random>=_pentagonChance+(_hardnessCounter/5)&&random<_squareChance+(_hardnessCounter/5))
+          selectedCornerNumber = 4;
+        else if (random>=_squareChance+(_hardnessCounter/5)&&random<_triangleChance+(_hardnessCounter/5))
+          selectedCornerNumber = 3;
+        else selectedCornerNumber = 0;
+        for (int i = 0; i < _sendableEnemiesList.Count; i++){
+          if (_sendableEnemiesList[i].GetComponent<EnemyStats>().Corner == selectedCornerNumber)
+          { selectedEnemy = _sendableEnemiesList[i]; _sendableEnemiesList.RemoveAt(i); break;}}
         if (selectedEnemy == null) continue;
         selectedEnemy.transform.position = _locations[_random.Next(0, 3)];
         selectedEnemy.SetActive(true);
+        _hardnessCounter++;
         _sendedEnemiesList.Add(selectedEnemy);}
     }
     private void destroyed(EnemyStats enemy){
@@ -81,7 +87,11 @@ namespace SOG.Enemy
     }
     private void restartAndIdleState(){
       _gameStatePlay = false; stopSendEnemiesCoroutine();
-      for (int i = 0; i < _enemiesList.Count; i++){ _enemiesList[i].SetActive(false);}
+      _hardnessCounter = 0;
+      for (int i = 0; i < _enemiesList.Count; i++){ 
+        _enemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Dynamic;
+        _enemiesList[i].GetComponent<EnemyStats>().RestartState();
+        _enemiesList[i].SetActive(false);}
       for (int i = 0; i < _sendedEnemiesList.Count; i++) {
         _sendableEnemiesList.Add(_sendedEnemiesList[0]); _sendedEnemiesList.RemoveAt(0);}
     }
@@ -100,12 +110,13 @@ namespace SOG.Enemy
 
     #region Unity's Methods
     private void Start(){
-      _random = new System.Random();
+      _random = new System.Random(new System.DateTime().Millisecond);
       _sendableEnemiesList = new List<GameObject>();
       _sendedEnemiesList = new List<GameObject>();
       _enemiesList = new List<GameObject>();
       _instantiateEnemies = instantiateEnemies();
       StartCoroutine(_instantiateEnemies);
+      _hardnessCounter = 0;
     }
     private void OnEnable(){
       GameStateEvents.OnGameStateChanged += gameStateHandler;

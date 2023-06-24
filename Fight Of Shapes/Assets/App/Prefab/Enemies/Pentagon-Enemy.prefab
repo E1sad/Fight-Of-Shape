@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 1053416628534207993}
   - component: {fileID: 504632735254613551}
   m_Layer: 7
-  m_Name: Hexagon-Enemy 1
+  m_Name: Pentagon-Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 30
   _damageOfHit: 2
-  _corner: 6
+  _corner: 5
   _scorePointOfEnemy: 25
   _punishScorePointOfEnemy: -13
   _duration: 0.2

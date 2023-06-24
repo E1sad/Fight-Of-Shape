@@ -1,3 +1,4 @@
+using SOG.Bullet;
 using SOG.Player;
 using System.Collections;
 using UnityEngine;
@@ -25,6 +26,7 @@ namespace SOG.Enemy
     
     #region My Methods
     public void damage(int damageOfHit){
+      SpawnDamageFeedbackEvent.Raise(this, new SpawnDamageFeedbackEventArgs(transform.position, damageOfHit));
       if (_health - damageOfHit <= 0){
         _healthBar.value = 0; UI.GamePlay.AddScoreEvent.Raise(_scorePointOfEnemy); dead();}
       else { _health -= damageOfHit; StartCoroutine(ShakeEnemy()); }
@@ -34,6 +36,7 @@ namespace SOG.Enemy
       _health = _healthRemainder; _healthBar.value = 1;
       DestroyEnemyEvent.Raise(this,new DestroyEnemyEventArgs(this));
     }
+    public void RestartState() { _health = _healthRemainder; _healthBar.value = 1; }
     private IEnumerator ShakeEnemy(){
       float original_x = gameObject.transform.position.x;
       float elapsed = 0f;

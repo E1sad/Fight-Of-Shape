@@ -11,6 +11,7 @@ namespace SOG.Bullet{
     [SerializeField] private int _ordinaryDamage;
     [SerializeField] private int _criticalDamageMin;
     [SerializeField] private int _criticalDamageMax;
+    [SerializeField] private int _criticalBulletRandomRange;
 
     [Header("Links")]
     [SerializeField] private GameObject _bullet;
@@ -42,7 +43,7 @@ namespace SOG.Bullet{
       _throwableBulletList.RemoveAt(0);
       bullet.transform.position = position;
       bullet.transform.rotation = rotation;
-      if (random.Next(6) == 0){
+      if (random.Next(_criticalBulletRandomRange) == 0){
         bullet.GetComponent<SpriteRenderer>().color = Color.red;
         bullet.GetComponent<Bullet>().Damage = random.Next(_criticalDamageMin, _criticalDamageMax);}
       else{
