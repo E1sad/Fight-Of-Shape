@@ -1,6 +1,7 @@
 namespace SOG.UI.Settings{
   public static class BackButtonPressedEvent{
-    public static event System.Action<bool> OnBackButtonPressedEvent;
-    public static void Raise(bool isFromMenu) { OnBackButtonPressedEvent?.Invoke(isFromMenu);}
+    public static event System.Action<bool,bool> OnBackButtonPressedEvent;
+    public static void Raise(bool isFromMenu, bool isFromPause) { 
+      OnBackButtonPressedEvent?.Invoke(isFromMenu, isFromPause);}
   }
 }

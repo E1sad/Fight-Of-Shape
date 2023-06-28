@@ -15,14 +15,14 @@ namespace SOG.UI.MainMenu{
       view.gameObject.SetActive(false);
     }
     public void OnSettingsButtonPressed(){
-      SettingsButtonPressedEvent.Raise(true);
+      SettingsButtonPressedEvent.Raise(true,false);
       view.gameObject.SetActive(false);
     }
     public void OnCreditsButtonPressed(){ 
       CreditsButtonPressedEvent.Raise();
       view.gameObject.SetActive(false);
     }
-    private void BackButtonPressedEventHandler(bool isFromMenu){
+    private void BackButtonPressedEventHandler(bool isFromMenu, bool isFromPause){
       if(isFromMenu) view.gameObject.SetActive(true);
     }
     private void BackButtonPressedFromCreditsEventHandler(){

@@ -11,7 +11,7 @@ namespace SOG.UI.GameOver{
     #region My Methods
     public void SettingsButtonPressed(){
       view.gameObject.SetActive(false);
-      SettingsButtonPressedEvent.Raise(false);
+      SettingsButtonPressedEvent.Raise(false,false);
     }
     public void RestartButtonPressed(){
       view.gameObject.SetActive(false);
@@ -23,11 +23,12 @@ namespace SOG.UI.GameOver{
       MainMenuButtonPressedEvent.Raise();
       view.SetScore(0);
     }
-    private void BackButtonPressedEventHandler(bool isFromMenu){
-      if (!isFromMenu) view.gameObject.SetActive(true);
+    private void BackButtonPressedEventHandler(bool isFromMenu, bool isFromPause){
+      if (!isFromMenu && !isFromPause) view.gameObject.SetActive(true);
     }
     private void DamagedPlayerHealhtEventHandler(int health){
       if (health > 0) return;
+      view.BestScore();
       view.gameObject.SetActive(true);
       GameOverEvent.Raise();
     }
@@ -35,6 +36,12 @@ namespace SOG.UI.GameOver{
     #endregion
 
     #region Unity's Methods
+    private void Start()
+    {
+      view.SetScore(0);
+      view.SetBestScoer(0); //Temporary. When save system implemented, you should change that;
+
+    }
     private void OnEnable(){
       SOG.UI.Settings.BackButtonPressedEvent.OnBackButtonPressedEvent += BackButtonPressedEventHandler;
       DamagedPlayerHealhtEvent.EventDamagedPlayerHealth += DamagedPlayerHealhtEventHandler;

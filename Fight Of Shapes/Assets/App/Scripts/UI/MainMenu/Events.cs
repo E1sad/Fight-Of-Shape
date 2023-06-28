@@ -6,8 +6,9 @@ namespace SOG.UI.MainMenu{
     public static void Raise(){OnPlayButtonPressedEvent?.Invoke();}
   }
   public static class SettingsButtonPressedEvent{
-    public static event Action<bool> OnSettingsButtonPressedEvent;
-    public static void Raise(bool isFromMenu) { OnSettingsButtonPressedEvent?.Invoke(isFromMenu); }
+    public static event Action<bool,bool> OnSettingsButtonPressedEvent;
+    public static void Raise(bool isFromMenu, bool isFromPause) { 
+      OnSettingsButtonPressedEvent?.Invoke(isFromMenu,isFromPause); }
   }
   public static class CreditsButtonPressedEvent {
     public static event Action OnCreditsButtonPressed;

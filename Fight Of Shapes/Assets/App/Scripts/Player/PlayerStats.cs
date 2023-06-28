@@ -1,5 +1,6 @@
 using SOG.Bullet;
 using SOG.UI.GamePlay;
+using SOG.UI.MainMenu;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace SOG.Player
     [SerializeField] private GameObject[] _shapes;
 
     //Internal varibales
+    private int _healthRemainder;
 
     #region My Methods
     public void damage(int damageOfHit)
@@ -21,13 +23,21 @@ namespace SOG.Player
       else { _health -= damageOfHit; DamagedPlayerHealhtEvent.Raise(_health);
         Camera.ShakeCameraEvent.Raise(this, new Camera.CameraShakerEventArg(.2f, .1f));}
     }
-    private void dead(){ DamagedPlayerHealhtEvent.Raise(0);}
-
+    private void dead(){ 
+      DamagedPlayerHealhtEvent.Raise(0); _health = _healthRemainder; 
+      DamagedPlayerHealhtEvent.Raise(_health); }
+    private void onPlayButtonPressedEventHandler() { DamagedPlayerHealhtEvent.Raise(_health); }
     #endregion
 
     #region Unity's Methods
     private void Start(){
-      DamagedPlayerHealhtEvent.Raise(_health);
+      _healthRemainder = _health; //Temporary. When save system implemented you should change that.
+    }
+    private void OnEnable(){
+      PlayButtonPressedEvent.OnPlayButtonPressedEvent += onPlayButtonPressedEventHandler;
+    }
+    private void OnDisable(){
+      PlayButtonPressedEvent.OnPlayButtonPressedEvent -= onPlayButtonPressedEventHandler;
     }
     #endregion
   }

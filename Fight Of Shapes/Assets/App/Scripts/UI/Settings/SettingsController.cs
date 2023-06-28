@@ -11,14 +11,15 @@ namespace SOG.UI.Settings
     [SerializeField] private SettingsView view;
     //Internal varibales
     private bool _isFromMenu;
+    private bool _isFromPause;
 
     #region My Methods
     public void BackButtonPressed(){
       view.gameObject.SetActive(false);
-      BackButtonPressedEvent.Raise(_isFromMenu);
+      BackButtonPressedEvent.Raise(_isFromMenu, _isFromPause);
     }
-    private void SettingsButtonPressedEventHandler(bool isFromMenu){
-      view.gameObject.SetActive(true); _isFromMenu = isFromMenu;
+    private void SettingsButtonPressedEventHandler(bool isFromMenu,bool isFromPause){
+      view.gameObject.SetActive(true); _isFromMenu = isFromMenu; _isFromPause = isFromPause;
     }
     #endregion
 

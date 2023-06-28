@@ -12,8 +12,10 @@ namespace SOG.UI.GameOver
 
     [Header("Links")]
     [SerializeField] private GameOverController controller;
+    
     //Internal varibales
     private int _score;
+    private int _bestScore;
 
     #region My Methods
     public void OnSettingsButtonPressed(){
@@ -27,13 +29,12 @@ namespace SOG.UI.GameOver
     }
     public void AddScore(int score) { _score += score; _scoreText.text = Convert.ToString(_score); }
     public void SetScore(int score) { _score = score; _scoreText.text = Convert.ToString(_score); }
+    public void BestScore(){if(_bestScore<_score)_bestScore = _score; _bestScoreText.text="Best: "+_bestScore;}
+    public void SetBestScoer(int score) { _bestScore = score; _bestScoreText.text = "Best: " + _bestScore;}
     #endregion
 
     #region Unity's Methods
-    private void Start(){
-      _score = 0;
-      AddScore(_score);
-    }
+
     #endregion
   }
 }
