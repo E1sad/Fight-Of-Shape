@@ -1,5 +1,6 @@
 using SOG.Game_Manager;
 using SOG.UI.MainMenu;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,12 +35,14 @@ namespace SOG.Player
         default: return Location.NULL;}
     }
     private void move(Vector3 target){
-      if (target.x == transform.position.x) { _isMoving = false; return; }
+      if (Math.Round(target.x,1,MidpointRounding.AwayFromZero) == Math.Round(transform.position.x,1,MidpointRounding.AwayFromZero))
+      { _isMoving = false; return; }
       _isMoving = true;
       transform.position = Vector3.MoveTowards(transform.position, target, _movementSpeed * Time.deltaTime);
     }
     private void playerMovement(){
       if (_isMoving) return;
+      /*Debug.Log("Waiting....");*/
       if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow) || _isRightSwipe){
         if(_indexOfLocations < 2) _indexOfLocations += 1;
         _playerLocation = fromIndexToLocation(_indexOfLocations);
@@ -52,10 +55,10 @@ namespace SOG.Player
     private void Swipe(){
       if (Input.touchCount > 0){
         if(Input.GetTouch(0).phase == TouchPhase.Began) _touchStartPos = Input.GetTouch(0).position;
-        if (Input.GetTouch(0).phase == TouchPhase.Ended) { 
+        if (Input.GetTouch(0).phase == TouchPhase.Ended && _touchStartPos != new Vector2(0,0)) { 
           _touchEndPos = Input.GetTouch(0).position;
           if (_touchStartPos.x - _touchEndPos.x > 50) _isLeftSwipe = true;
-          if (_touchStartPos.x - _touchEndPos.x < -50)  _isRightSwipe = true;}}
+          if (_touchStartPos.x - _touchEndPos.x < -50)_isRightSwipe = true;}}
     }
     private void gameStateHandler(object sender, GameStateChangedEvent eventargs){
       switch (eventargs.CurrentGameState){

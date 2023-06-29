@@ -1,4 +1,5 @@
 using SOG.Bullet;
+using SOG.Game_Manager;
 using SOG.UI.GamePlay;
 using SOG.UI.MainMenu;
 using System.Collections.Generic;
@@ -27,6 +28,9 @@ namespace SOG.Player
       DamagedPlayerHealhtEvent.Raise(0); _health = _healthRemainder; 
       DamagedPlayerHealhtEvent.Raise(_health); }
     private void onPlayButtonPressedEventHandler() { DamagedPlayerHealhtEvent.Raise(_health); }
+    private void OnGameStateChangedEventHandler(object sender , GameStateChangedEvent eventArgs) {
+      if(eventArgs.CurrentGameState == GameState.PLAY_STATE) DamagedPlayerHealhtEvent.Raise(_health); 
+    }
     #endregion
 
     #region Unity's Methods
@@ -35,9 +39,12 @@ namespace SOG.Player
     }
     private void OnEnable(){
       PlayButtonPressedEvent.OnPlayButtonPressedEvent += onPlayButtonPressedEventHandler;
+      GameStateEvents.OnGameStateChanged += OnGameStateChangedEventHandler;
     }
     private void OnDisable(){
       PlayButtonPressedEvent.OnPlayButtonPressedEvent -= onPlayButtonPressedEventHandler;
+      GameStateEvents.OnGameStateChanged -= OnGameStateChangedEventHandler;
+
     }
     #endregion
   }

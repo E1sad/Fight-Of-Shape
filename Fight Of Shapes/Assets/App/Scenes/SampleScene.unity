@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 2
-  _getAwayMultiplier: 0.01
+  _getAwayMultiplier: 0.005
   _textPrefab: {fileID: 4352994768213550047, guid: ad04a5bb9bb319942b98bce8a6069537, type: 3}
 --- !u!114 &57782616
 MonoBehaviour:
@@ -2417,7 +2417,7 @@ GameObject:
   - component: {fileID: 529379459}
   - component: {fileID: 529379461}
   - component: {fileID: 529379460}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Square-Shape
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3849,7 +3849,7 @@ GameObject:
   - component: {fileID: 1072366423}
   - component: {fileID: 1072366426}
   - component: {fileID: 1072366427}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -3937,7 +3937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b202cd5d6d9b4b44a87460890edebf60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 1
+  _health: 10
   _shapes:
   - {fileID: 2121220540}
   - {fileID: 529379458}
@@ -5978,10 +5978,10 @@ MonoBehaviour:
   - {x: 1.5, y: 6, z: 0}
   _gameStatePlay: 1
   _frequency: 2.5
-  _hexagonChance: 1
-  _pentagonChance: 3
-  _squareChance: 10
-  _triangleChance: 20
+  _hexagonChance: 0
+  _pentagonChance: 1
+  _squareChance: 4
+  _triangleChance: 10
   _enemyTypes:
   - {fileID: 1053416628534207992, guid: 2b28403c5aff139408e9e4272c9e7543, type: 3}
   - {fileID: 1053416628534207992, guid: 3f2c69d3d0d456b4f91cd0170c60dbdc, type: 3}
@@ -6550,7 +6550,7 @@ GameObject:
   - component: {fileID: 2121220541}
   - component: {fileID: 2121220543}
   - component: {fileID: 2121220542}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Circle-Shape
   m_TagString: Untagged
   m_Icon: {fileID: 0}

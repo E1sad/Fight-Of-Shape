@@ -20,17 +20,6 @@ namespace SOG.Bullet
     private bool _isGamePlayState;
 
     #region My Methods
-    private void gameStateHandler(object sender, GameStateChangedEvent eventargs){
-      switch (eventargs.CurrentGameState){
-        case GameState.IDLE_STATE: restartAndIdleState(); break;
-        case GameState.RESTART_STATE: restartAndIdleState(); break;
-        case GameState.PAUSE_STATE: pauseState(); break;
-        case GameState.PLAY_STATE: gamePlayState(); break;
-        default: break;}
-    }
-    private void restartAndIdleState() { _isGamePlayState = true; }
-    private void pauseState() { _isGamePlayState = false; }
-    private void gamePlayState() { _isGamePlayState = true; }
     public void SetIsGamePlayState(bool set) { _isGamePlayState = set; }
     private void move(){_bulletRb.velocity = new Vector2(0,_speed*Time.deltaTime);}
 
@@ -41,21 +30,12 @@ namespace SOG.Bullet
       if (!_isGamePlayState) return;
       move();
     }
-    private void Start(){
-      _isGamePlayState = true;
-    }
     private void OnCollisionEnter2D(Collision2D collision){
       if (collision.gameObject.CompareTag("Enemy")) {
         collision.gameObject.GetComponent<EnemyStats>().damage(_damage);
         DestroyBulletEvent.Raise(this, new DestroyBulletEventArgs(this));}
       if(collision.gameObject.CompareTag("Boundary")){
         DestroyBulletEvent.Raise(this, new DestroyBulletEventArgs(this));}
-    }
-    private void OnEnable(){
-      GameStateEvents.OnGameStateChanged += gameStateHandler;
-    }
-    private void OnDisable(){
-      GameStateEvents.OnGameStateChanged -= gameStateHandler;
     }
     #endregion
   }

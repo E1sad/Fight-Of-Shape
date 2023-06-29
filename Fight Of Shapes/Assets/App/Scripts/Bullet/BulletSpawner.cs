@@ -28,6 +28,7 @@ namespace SOG.Bullet{
       for(int i = 0; i < _numberOfBullets; i++){
         GameObject bullet = Instantiate(_bullet,transform);
         bullet.SetActive(false);
+        bullet.GetComponent<Bullet>().SetIsGamePlayState(true);
         _throwableBulletList.Add(bullet);
         _bulletList.Add(bullet);
         yield return new WaitForSeconds(0.1f);}
@@ -60,15 +61,18 @@ namespace SOG.Bullet{
     }
     private void pauseState(){
       for (int i = 0; i < _throwedBulletList.Count; i++){
+        _throwedBulletList[i].GetComponent<Bullet>().SetIsGamePlayState(false);
         _throwedBulletList[i].GetComponent<Bullet>().BulletRb.bodyType = RigidbodyType2D.Static;}
     }
     private void playGameState(){
       for (int i = 0; i < _throwedBulletList.Count; i++){
+        _throwedBulletList[i].GetComponent<Bullet>().SetIsGamePlayState(true);
         _throwedBulletList[i].GetComponent<Bullet>().BulletRb.bodyType = RigidbodyType2D.Dynamic;}
     }
     private void restartAndIdleGameState(){
       for (int i = 0; i < _bulletList.Count; i++){
         _bulletList[i].SetActive(false);
+        _bulletList[i].GetComponent<Bullet>().BulletRb.bodyType = RigidbodyType2D.Dynamic;
         _bulletList[i].GetComponent<Bullet>().SetIsGamePlayState(true);}
       for (int i = 0; i < _throwedBulletList.Count; i++){
         _throwableBulletList.Add(_throwedBulletList[0]);

@@ -21,12 +21,14 @@ namespace SOG.UI.GamePlay{
     private void onPlayButtonPressedEventHandler() { view.gameObject.SetActive(true);}
     private void damagedPlayerHealthEventHandler(int health) { view.DamagedHealth(health);}
     private void OnRestartButtonPressedHandler(bool isFromMenu){
-      view.gameObject.SetActive(true);
-      view.SetScore(0);
+      view.gameObject.SetActive(true); view.SetScore(0);
     }
     private void OnMainMenuButtonPressedEventHandler() { view.gameObject.SetActive(false); view.SetScore(0); }
     private void gameOverEventHandler() { view.gameObject.SetActive(false);}
     private void damagedPlayerHealhtEventHandler(int health) { view.DamagedHealth(health); }
+    private void onGameStateChangedEventHandler(object sender, Game_Manager.GameStateChangedEvent eventArgs) {
+      view.gameObject.SetActive(true); view.SetScore(0);
+    }
     #endregion
 
     #region Unity's Methods
@@ -40,8 +42,8 @@ namespace SOG.UI.GamePlay{
       RestartButtonPressedEvent.OnRestartButtonPressed += OnRestartButtonPressedHandler;
       MainMenuButtonPressedEvent.OnMainMenuButtonPressedEvent += OnMainMenuButtonPressedEventHandler;
       GameOverEvent.EventGameOver += gameOverEventHandler;
-      DamagedPlayerHealhtEvent.EventDamagedPlayerHealth += damagedPlayerHealhtEventHandler;
-      //DamagedPlayerHealhtEvent.EventDamagedPlayerHealth += damagedPlayerHealthEventHandler; 
+      //DamagedPlayerHealhtEvent.EventDamagedPlayerHealth += damagedPlayerHealhtEventHandler;
+      Game_Manager.GameStateEvents.OnGameStateChanged += onGameStateChangedEventHandler;
     }
     private void OnDisable(){
       AddScoreEvent.EventAddScore -= addScoreEventHandler;
@@ -50,8 +52,8 @@ namespace SOG.UI.GamePlay{
       MainMenuButtonPressedEvent.OnMainMenuButtonPressedEvent -= OnMainMenuButtonPressedEventHandler;
       GameOverEvent.EventGameOver -= gameOverEventHandler;
       DamagedPlayerHealhtEvent.EventDamagedPlayerHealth -= damagedPlayerHealhtEventHandler;
+      Game_Manager.GameStateEvents.OnGameStateChanged -= onGameStateChangedEventHandler;
 
-      //DamagedPlayerHealhtEvent.EventDamagedPlayerHealth -= damagedPlayerHealthEventHandler;
     }
     #endregion
   }

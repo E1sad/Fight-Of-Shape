@@ -47,6 +47,7 @@ namespace SOG.Enemy
         yield return null;}
       transform.position = new Vector3(original_x, transform.position.y, transform.position.z);
     }
+    public void SetHealthRemainder() { _healthRemainder = _health; }
     #endregion
 
     #region Unity's Methods
@@ -56,9 +57,6 @@ namespace SOG.Enemy
         dead();}
       if (collision.gameObject.CompareTag("Boundary")) { dead(); 
         UI.GamePlay.AddScoreEvent.Raise(_punishScorePointOfEnemy);}
-    }
-    private void Start(){
-      _healthRemainder = _health;
     }
     #endregion
   }

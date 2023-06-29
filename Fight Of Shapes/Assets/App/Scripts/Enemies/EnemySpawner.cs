@@ -1,4 +1,5 @@
 using SOG.Game_Manager;
+using SOG.UI.GameOver;
 using SOG.UI.MainMenu;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,6 +35,8 @@ namespace SOG.Enemy
       for (int type = 0; type < _enemyTypes.Length; type++){
         for (int i = 0; i < 5; i++){
           GameObject enemy = Instantiate(_enemyTypes[type], transform);
+          enemy.GetComponent<EnemyStats>().SetHealthRemainder();
+          enemy.GetComponent<EnemyMovement>().SetIsGamePlayState(true);
           enemy.SetActive(false);
           _sendableEnemiesList.Add(enemy);
           _enemiesList.Add(enemy);
@@ -45,6 +48,12 @@ namespace SOG.Enemy
         GameObject selectedEnemy = null;
         int selectedCornerNumber = 0;
         int random = _random.Next(0, 100);
+/*        Debug.Log(random);
+        Debug.Log($"Hexagon chance: {_hexagonChance + (_hardnessCounter / 5)}");
+        Debug.Log($"Pentagon chance: {_pentagonChance + (_hardnessCounter / 5)}");
+        Debug.Log($"Square chance: {_squareChance + (_hardnessCounter / 5)}");
+        Debug.Log($"Triangle chance: {_triangleChance + (_hardnessCounter / 5)}");
+        Debug.Log($"Circle chance: {100 - (_triangleChance+ (_hardnessCounter / 5))}");*/
         if (random < _hexagonChance + (_hardnessCounter / 5)) selectedCornerNumber = 6;
         else if (random>=_hexagonChance+(_hardnessCounter/5)&&random<_pentagonChance+(_hardnessCounter/5))
           selectedCornerNumber = 5;
@@ -77,12 +86,14 @@ namespace SOG.Enemy
     }
     private void gamePlayState() {
       for (int i = 0; i < _sendedEnemiesList.Count; i++){
-        _sendedEnemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Dynamic;}
+        _sendedEnemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Dynamic;
+        _sendedEnemiesList[i].GetComponent<EnemyMovement>().SetIsGamePlayState(true);}
       _gameStatePlay = true; startSendEnemiesCoroutine();
     }
     private void pauseState(){
       _gameStatePlay = false; stopSendEnemiesCoroutine();
       for (int i = 0; i < _sendedEnemiesList.Count; i++){
+        _sendedEnemiesList[i].GetComponent<EnemyMovement>().SetIsGamePlayState(false);
         _sendedEnemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Static;}
     }
     private void restartAndIdleState(){
@@ -90,6 +101,7 @@ namespace SOG.Enemy
       _hardnessCounter = 0;
       for (int i = 0; i < _enemiesList.Count; i++){ 
         _enemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Dynamic;
+        _enemiesList[i].GetComponent<EnemyMovement>().SetIsGamePlayState(true);
         _enemiesList[i].GetComponent<EnemyStats>().RestartState();
         _enemiesList[i].SetActive(false);}
       for (int i = 0; i < _sendedEnemiesList.Count; i++) {
@@ -110,7 +122,7 @@ namespace SOG.Enemy
 
     #region Unity's Methods
     private void Start(){
-      _random = new System.Random(new System.DateTime().Millisecond);
+      _random = new System.Random();
       _sendableEnemiesList = new List<GameObject>();
       _sendedEnemiesList = new List<GameObject>();
       _enemiesList = new List<GameObject>();
@@ -121,11 +133,13 @@ namespace SOG.Enemy
     private void OnEnable(){
       GameStateEvents.OnGameStateChanged += gameStateHandler;
       DestroyEnemyEvent.EventDestroyEnemy += DestroyEnemeyEventHandler;
+      //GameOverEvent.EventGameOver += pauseState;
       //PlayButtonPressedEvent.OnPlayButtonPressedEvent += gamePlayState;
     }
     private void OnDisable(){
       GameStateEvents.OnGameStateChanged -= gameStateHandler;
       DestroyEnemyEvent.EventDestroyEnemy -= DestroyEnemeyEventHandler;
+      //GameOverEvent.EventGameOver += pauseState;
       //PlayButtonPressedEvent.OnPlayButtonPressedEvent -= gamePlayState;
     }
     #endregion

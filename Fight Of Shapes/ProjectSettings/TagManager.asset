@@ -16,8 +16,8 @@ TagManager:
   - UpperBoundary
   - Enemy
   - BottomBoundary
-  - 
-  - 
+  - Bullet Layer
+  - Player Layer
   - 
   - 
   - 

@@ -17,19 +17,7 @@ namespace SOG.Enemy
     private GameState state;
 
     #region My Methods
-    private void gameStateHandler(object sender, GameStateChangedEvent eventargs){
-      switch (eventargs.CurrentGameState){
-        case GameState.IDLE_STATE: restartAndIdleState(); break;
-        case GameState.RESTART_STATE: restartAndIdleState(); break;
-        case GameState.PAUSE_STATE: pauseState(); break;
-        case GameState.PLAY_STATE: gamePlayState(); break;
-        default: break;}
-    }
-
-    private void restartAndIdleState(){_isGamePlayState = true;}
-    private void pauseState(){_isGamePlayState = false;}
-    private void gamePlayState(){_isGamePlayState = true;}
-
+    public void SetIsGamePlayState(bool state) { _isGamePlayState = state; }
     public void SetSpeed(float _speed) { this._speed = _speed; }
     #endregion
 
@@ -37,15 +25,6 @@ namespace SOG.Enemy
     private void Update(){
       if (!_isGamePlayState) return;
       _enemyRb.velocity = Vector2.up * (-_speed)* Time.deltaTime; 
-    }
-    private void Start(){
-      _isGamePlayState = true;
-    }
-    private void OnEnable(){
-      GameStateEvents.OnGameStateChanged += gameStateHandler;
-    }
-    private void OnDisable(){
-      GameStateEvents.OnGameStateChanged -= gameStateHandler;
     }
     #endregion
   }

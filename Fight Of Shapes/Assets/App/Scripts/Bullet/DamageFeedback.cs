@@ -37,7 +37,7 @@ namespace SOG.Bullet{
       textFeatures.text = System.Convert.ToString(damage);
       while (elapsed < _duration) {
         textFeatures.alpha = (1-(elapsed/_duration))*_localTimeScale;
-        position += new Vector3(1*_getAwayMultiplier*_localTimeScale,1 * _getAwayMultiplier * _localTimeScale, 0);
+        position += new Vector3(1*_getAwayMultiplier*_localTimeScale,2 * _getAwayMultiplier * _localTimeScale, 0);
         textObject.transform.position = position;
         elapsed += Time.deltaTime * _localTimeScale;
         yield return null;
