@@ -26,7 +26,7 @@ namespace SOG.Enemy
     
     #region My Methods
     public void damage(int damageOfHit){
-      SpawnDamageFeedbackEvent.Raise(this, new SpawnDamageFeedbackEventArgs(transform.position, damageOfHit));
+      SpawnDamageFeedbackEvent.Raise(this,new SpawnDamageFeedbackEventArgs(transform.position,damageOfHit,_corner));
       if (_health - damageOfHit <= 0){
         _healthBar.value = 0; UI.GamePlay.AddScoreEvent.Raise(_scorePointOfEnemy); dead();}
       else { _health -= damageOfHit; StartCoroutine(ShakeEnemy()); }

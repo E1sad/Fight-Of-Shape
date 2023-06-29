@@ -176,6 +176,7 @@ MonoBehaviour:
   _duration: 2
   _getAwayMultiplier: 0.005
   _textPrefab: {fileID: 4352994768213550047, guid: ad04a5bb9bb319942b98bce8a6069537, type: 3}
+  _particleSystem: {fileID: 1178058115810282832, guid: 71d901a04c6daaa4ca961f1851ea47ac, type: 3}
 --- !u!114 &57782616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3937,7 +3938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b202cd5d6d9b4b44a87460890edebf60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 10
+  _health: 3
   _shapes:
   - {fileID: 2121220540}
   - {fileID: 529379458}
@@ -5983,7 +5984,7 @@ MonoBehaviour:
   _squareChance: 4
   _triangleChance: 10
   _enemyTypes:
-  - {fileID: 1053416628534207992, guid: 2b28403c5aff139408e9e4272c9e7543, type: 3}
+  - {fileID: 1053416628534207992, guid: 6ce794871378bf34295fb891c2d9feae, type: 3}
   - {fileID: 1053416628534207992, guid: 3f2c69d3d0d456b4f91cd0170c60dbdc, type: 3}
   - {fileID: 1053416628534207992, guid: 630b346d1b6e677448ce7415952bcdd4, type: 3}
   - {fileID: 1053416628534207992, guid: b5b8ada6fb60285408c5d2ca6566f08a, type: 3}
@@ -6800,9 +6801,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _numberOfBullets: 10
   _ordinaryDamage: 5
-  _criticalDamageMin: 10
-  _criticalDamageMax: 15
-  _criticalBulletRandomRange: 6
+  _criticalDamageMin: 40
+  _criticalDamageMax: 71
+  _criticalBulletRandomRange: 5
   _bullet: {fileID: 2709818753168528836, guid: 1ae09e2c5d665564bad60cc908b19eec, type: 3}
 --- !u!1 &4737778122024545990
 GameObject:

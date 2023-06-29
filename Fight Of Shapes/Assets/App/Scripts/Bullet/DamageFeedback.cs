@@ -12,6 +12,7 @@ namespace SOG.Bullet{
 
     [Header("Links")]
     [SerializeField] private GameObject _textPrefab;
+    [SerializeField] private ParticleSystem _particleSystem;
 
     //Internal varibales
     private List<GameObject> _allTextGameObjects;
@@ -31,6 +32,8 @@ namespace SOG.Bullet{
     private IEnumerator damageFeedback(Vector3 position,int damage) {
       float elapsed = 0f;
       GameObject textObject = send();
+/*      _particleSystem.transform.position = position;
+      _particleSystem.Play();*/
       textObject.transform.position = position;
       position += new Vector3(.5f, 1, 0);
       TMP_Text textFeatures = textObject.GetComponent<TextMeshProUGUI>();

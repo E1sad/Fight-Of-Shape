@@ -27,7 +27,7 @@ namespace SOG.UI.GamePlay{
     private void gameOverEventHandler() { view.gameObject.SetActive(false);}
     private void damagedPlayerHealhtEventHandler(int health) { view.DamagedHealth(health); }
     private void onGameStateChangedEventHandler(object sender, Game_Manager.GameStateChangedEvent eventArgs) {
-      view.gameObject.SetActive(true); view.SetScore(0);
+      if(eventArgs.CurrentGameState == GameState.RESTART_STATE) view.SetScore(0);
     }
     #endregion
 
@@ -42,7 +42,7 @@ namespace SOG.UI.GamePlay{
       RestartButtonPressedEvent.OnRestartButtonPressed += OnRestartButtonPressedHandler;
       MainMenuButtonPressedEvent.OnMainMenuButtonPressedEvent += OnMainMenuButtonPressedEventHandler;
       GameOverEvent.EventGameOver += gameOverEventHandler;
-      //DamagedPlayerHealhtEvent.EventDamagedPlayerHealth += damagedPlayerHealhtEventHandler;
+      DamagedPlayerHealhtEvent.EventDamagedPlayerHealth += damagedPlayerHealhtEventHandler;
       Game_Manager.GameStateEvents.OnGameStateChanged += onGameStateChangedEventHandler;
     }
     private void OnDisable(){

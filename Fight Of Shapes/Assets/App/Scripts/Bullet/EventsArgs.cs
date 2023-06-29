@@ -15,7 +15,9 @@ namespace SOG.Bullet{
   public class SpawnDamageFeedbackEventArgs: EventArgs { 
     public Vector3 Position { private set; get; }
     public int Damage { private set; get; }
-    public SpawnDamageFeedbackEventArgs(Vector3 position, int damage){
-      Position = position; Damage = damage;}
+    public int Corner { private set; get; }
+    public SpawnDamageFeedbackEventArgs(Vector3 position, int damage, int corner){
+      Position = position; Damage = damage; Corner = corner;
+    }
   }
 }

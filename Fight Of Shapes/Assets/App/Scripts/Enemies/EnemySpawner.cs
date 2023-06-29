@@ -37,6 +37,7 @@ namespace SOG.Enemy
           GameObject enemy = Instantiate(_enemyTypes[type], transform);
           enemy.GetComponent<EnemyStats>().SetHealthRemainder();
           enemy.GetComponent<EnemyMovement>().SetIsGamePlayState(true);
+          enemy.GetComponent<EnemyMovement>().SetHardness(0);
           enemy.SetActive(false);
           _sendableEnemiesList.Add(enemy);
           _enemiesList.Add(enemy);
@@ -66,6 +67,7 @@ namespace SOG.Enemy
           if (_sendableEnemiesList[i].GetComponent<EnemyStats>().Corner == selectedCornerNumber)
           { selectedEnemy = _sendableEnemiesList[i]; _sendableEnemiesList.RemoveAt(i); break;}}
         if (selectedEnemy == null) continue;
+        selectedEnemy.GetComponent<EnemyMovement>().SetHardness(_hardnessCounter / 10);
         selectedEnemy.transform.position = _locations[_random.Next(0, 3)];
         selectedEnemy.SetActive(true);
         _hardnessCounter++;
@@ -102,6 +104,7 @@ namespace SOG.Enemy
       for (int i = 0; i < _enemiesList.Count; i++){ 
         _enemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Dynamic;
         _enemiesList[i].GetComponent<EnemyMovement>().SetIsGamePlayState(true);
+        _enemiesList[i].GetComponent<EnemyMovement>().SetHardness(0);
         _enemiesList[i].GetComponent<EnemyStats>().RestartState();
         _enemiesList[i].SetActive(false);}
       for (int i = 0; i < _sendedEnemiesList.Count; i++) {

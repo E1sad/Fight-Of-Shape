@@ -27,7 +27,11 @@ namespace SOG.UI.GameOver
     public void OnMainMenuButtonPressed(){
       controller.MainMenuButtonPressed();
     }
-    public void AddScore(int score) { _score += score; _scoreText.text = Convert.ToString(_score); }
+    public void AddScore(int score){
+      if ((_score + score) <= 0) _score = 0;
+      else _score += score;
+      _scoreText.text = Convert.ToString(_score);
+    }
     public void SetScore(int score) { _score = score; _scoreText.text = Convert.ToString(_score); }
     public void BestScore(){if(_bestScore<_score)_bestScore = _score; _bestScoreText.text="Best: "+_bestScore;}
     public void SetBestScoer(int score) { _bestScore = score; _bestScoreText.text = "Best: " + _bestScore;}

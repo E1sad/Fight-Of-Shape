@@ -45,11 +45,14 @@ namespace SOG.Bullet{
       bullet.transform.position = position;
       bullet.transform.rotation = rotation;
       if (random.Next(_criticalBulletRandomRange) == 0){
-        bullet.GetComponent<SpriteRenderer>().color = Color.red;
-        bullet.GetComponent<Bullet>().Damage = random.Next(_criticalDamageMin, _criticalDamageMax);}
+        bullet.GetComponent<SpriteRenderer>().color = new Color32(220, 47, 47, 255);
+        bullet.GetComponent<Bullet>().SetTrailColor(220, 47, 47);
+        bullet.GetComponent<Bullet>().Damage = 
+          (int)((_ordinaryDamage*(100+random.Next(_criticalDamageMin, _criticalDamageMax)))/100);}
       else{
         bullet.GetComponent<Bullet>().Damage = _ordinaryDamage;
-        bullet.GetComponent<SpriteRenderer>().color = Color.white;}
+        bullet.GetComponent<SpriteRenderer>().color = new Color32(66, 111, 176, 255);
+        bullet.GetComponent<Bullet>().SetTrailColor(66, 111, 176);}
       bullet.SetActive(true);
     }
     private void gameStateEventHandler(object sender, GameStateChangedEvent eventArgs){

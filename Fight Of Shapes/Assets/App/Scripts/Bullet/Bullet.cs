@@ -12,6 +12,7 @@ namespace SOG.Bullet
 
     [Header("Links")]
     [SerializeField] private Rigidbody2D _bulletRb;
+    [SerializeField] private TrailRenderer _trailRenderer;
 
     //Internal varibales
     private int _damage;
@@ -21,6 +22,10 @@ namespace SOG.Bullet
 
     #region My Methods
     public void SetIsGamePlayState(bool set) { _isGamePlayState = set; }
+    public void SetTrailColor(float r,float g,float b) {
+      _trailRenderer.startColor = new Color32((byte)r, (byte)g, (byte)b, 255 );
+      _trailRenderer.endColor = new Color32((byte)r, (byte)g, (byte)b, 0);
+    }
     private void move(){_bulletRb.velocity = new Vector2(0,_speed*Time.deltaTime);}
 
     #endregion
