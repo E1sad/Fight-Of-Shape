@@ -3,6 +3,7 @@ using SOG.Game_Manager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SOG.Player
 {
@@ -13,9 +14,11 @@ namespace SOG.Player
 
     [Header("Links")]
     [SerializeField] private Movement _playerMovement;
+    [SerializeField] private Image _reloadImage;
 
     //Internal varibales
-    private Coroutine _routine;
+    private Coroutine _shootingRoutine;
+    private Coroutine _reloadRoutine;
     private bool _isGamePlayState;
 
     #region My Methods
@@ -28,9 +31,19 @@ namespace SOG.Player
     }
     private IEnumerator shootingCoroutine(){
       while (_isGamePlayState){
+        startReloadRoutine();
         yield return new WaitForSeconds(_ShootingFrequency);
         SpawnBulletEvent.Raise(this,
-          new SpawnBulletEventArgs(fromLocationToVector(_playerMovement._playerLocation), Quaternion.identity));}
+          new SpawnBulletEventArgs(fromLocationToVector(_playerMovement._playerLocation), Quaternion.identity));
+        stopReloadRoutine();}
+    }
+    private IEnumerator reloadRoutine() {
+      float elapsed = 0f;
+      _reloadImage.fillAmount = 0;
+      while(elapsed < _ShootingFrequency) {
+        _reloadImage.fillAmount = elapsed / _ShootingFrequency;
+        elapsed += Time.deltaTime;
+        yield return null;}
     }
     private void gameStateHandler(object sender, GameStateChangedEvent eventargs){
       switch (eventargs.CurrentGameState){
@@ -40,13 +53,23 @@ namespace SOG.Player
         case GameState.PLAY_STATE: gamePlayState(); break;
         default: break;}
     }
-    private void restartAndIdleState() {_isGamePlayState = true; stopCoroutine();}
-    private void pauseState() { _isGamePlayState = false; stopCoroutine();}
-    private void gamePlayState() {_isGamePlayState = true; startCoroutine();}
-    private void startCoroutine() { 
-      if (_routine != null) StopCoroutine(_routine); _routine = StartCoroutine(shootingCoroutine());
+    private void restartAndIdleState() {_isGamePlayState = true; stopShootingCoroutine();}
+    private void pauseState() { _isGamePlayState = false; stopShootingCoroutine();}
+    private void gamePlayState() {_isGamePlayState = true; startShootingCoroutine();}
+    private void startShootingCoroutine() { 
+      if (_shootingRoutine != null) StopCoroutine(_shootingRoutine); 
+      _shootingRoutine = StartCoroutine(shootingCoroutine());
     }
-    private void stopCoroutine() { if(_routine != null) StopCoroutine(_routine); _routine = null; }
+    private void stopShootingCoroutine() { 
+      if(_shootingRoutine != null) StopCoroutine(_shootingRoutine); _shootingRoutine = null; 
+    }
+    private void startReloadRoutine() { 
+      if (_reloadRoutine != null) StopCoroutine(_reloadRoutine); 
+      _reloadRoutine = StartCoroutine(reloadRoutine());
+    }
+    private void stopReloadRoutine() { 
+      if (_reloadRoutine != null) StopCoroutine(_reloadRoutine); _reloadRoutine = null;
+    }
     #endregion
 
     #region Unity's Methods
