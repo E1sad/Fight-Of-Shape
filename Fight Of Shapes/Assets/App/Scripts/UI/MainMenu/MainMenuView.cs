@@ -10,6 +10,7 @@ namespace SOG.UI.MainMenu{
 
     #region My Methods
     public void OnPlayButtonPressed(){controller.OnPlayButtonPressed();}
+    public void OnShopMenuButtonpressed(){controller.OnShopMenuButtonpressed();}
     public void OnSettingsButtonPressed(){controller.OnSettingsButtonPressed();}
     public void OnCreditsButtonPressed(){ controller.OnCreditsButtonPressed();}
     #endregion

@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace SOG.UI.GameOver
 {
-  public class GameOverView : MonoBehaviour
-  {
+  public class GameOverView : MonoBehaviour{
     [Header("Variables")]
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private TMP_Text _bestScoreText;
@@ -18,23 +17,18 @@ namespace SOG.UI.GameOver
     private int _bestScore;
 
     #region My Methods
-    public void OnSettingsButtonPressed(){
-      controller.SettingsButtonPressed();
-    }
-    public void OnRestartButtonPressed(){
-      controller.RestartButtonPressed();
-    }
-    public void OnMainMenuButtonPressed(){
-      controller.MainMenuButtonPressed();
-    }
+    public void OnSettingsButtonPressed(){controller.SettingsButtonPressed();}
+    public void OnRestartButtonPressed(){controller.RestartButtonPressed();}
+    public void OnShopMenuButtonPressed(){ controller.OnShopMenuButtonPressed(); }
+    public void OnMainMenuButtonPressed(){controller.MainMenuButtonPressed();}
     public void AddScore(int score){
-      if ((_score + score) <= 0) _score = 0;
-      else _score += score;
+      if ((_score + score) <= 0) _score = 0; else _score += score;
       _scoreText.text = Convert.ToString(_score);
     }
     public void SetScore(int score) { _score = score; _scoreText.text = Convert.ToString(_score); }
     public void BestScore(){if(_bestScore<_score)_bestScore = _score; _bestScoreText.text="Best: "+_bestScore;}
     public void SetBestScoer(int score) { _bestScore = score; _bestScoreText.text = "Best: " + _bestScore;}
+    public void AddCoin() { controller.SendCoinEvent(_score / 10); }
     #endregion
 
     #region Unity's Methods

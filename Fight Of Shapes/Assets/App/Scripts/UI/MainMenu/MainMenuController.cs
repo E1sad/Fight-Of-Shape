@@ -1,4 +1,5 @@
 using SOG.UI.Settings;
+using SOG.UI.Shop;
 using UnityEngine;
 
 namespace SOG.UI.MainMenu{
@@ -13,6 +14,10 @@ namespace SOG.UI.MainMenu{
     public void OnPlayButtonPressed(){
       PlayButtonPressedEvent.Raise();
       view.gameObject.SetActive(false);
+    }
+    public void OnShopMenuButtonpressed() {
+      view.gameObject.SetActive(false);
+      ShopButtonPressedEvent.Raise("MainMenu");
     }
     public void OnSettingsButtonPressed(){
       SettingsButtonPressedEvent.Raise(true,false);
@@ -31,6 +36,9 @@ namespace SOG.UI.MainMenu{
     private void OnMainMenuButtonPressedEventHandler(){
       view.gameObject.SetActive(true);
     }
+    private void BackButtonFromShopPressedEventHandler(object sender, BackButtonFromShopEventArguments eventArgs){
+      if (eventArgs.PreviousPage == "MainMenu") { view.gameObject.SetActive(true); }
+    }
     #endregion
 
     #region Unity's Methods
@@ -38,11 +46,13 @@ namespace SOG.UI.MainMenu{
       SOG.UI.Settings.BackButtonPressedEvent.OnBackButtonPressedEvent += BackButtonPressedEventHandler;
       SOG.UI.Credits.BackButtonPressedEvent.OnBackButtonPressedEvent += BackButtonPressedFromCreditsEventHandler;
       SOG.UI.Pause.MainMenuButtonPressedEvent.OnMainMenuButtonPressedEvent += OnMainMenuButtonPressedEventHandler;
+      Shop.BackButtonPressedEvent.ShopMenuBackButtonPressedEvent += BackButtonFromShopPressedEventHandler;
     }
     private void OnDisable(){
       SOG.UI.Settings.BackButtonPressedEvent.OnBackButtonPressedEvent -= BackButtonPressedEventHandler;
       SOG.UI.Credits.BackButtonPressedEvent.OnBackButtonPressedEvent -= BackButtonPressedFromCreditsEventHandler;
       SOG.UI.Pause.MainMenuButtonPressedEvent.OnMainMenuButtonPressedEvent -= OnMainMenuButtonPressedEventHandler;
+      Shop.BackButtonPressedEvent.ShopMenuBackButtonPressedEvent -= BackButtonFromShopPressedEventHandler;
     }
     #endregion
   }
