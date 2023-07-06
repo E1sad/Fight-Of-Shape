@@ -2,6 +2,7 @@ using SOG.Bullet;
 using SOG.Game_Manager;
 using SOG.UI.GamePlay;
 using SOG.UI.MainMenu;
+using SOG.UI.Shop;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace SOG.Player
     [Header("Variables")]
     [SerializeField] private int _health;
     [Header("Links")]
-    [SerializeField] private GameObject[] _shapes;
+    [SerializeField] private SpriteRenderer _sprite;
 
     //Internal varibales
     private int _healthRemainder;
@@ -31,6 +32,9 @@ namespace SOG.Player
     private void OnGameStateChangedEventHandler(object sender , GameStateChangedEvent eventArgs) {
       if(eventArgs.CurrentGameState == GameState.PLAY_STATE) DamagedPlayerHealhtEvent.Raise(_health); 
     }
+    private void changePlayerStats(PlayerScriptableObject newStats) {
+      _health = newStats.Health; _sprite.sprite = newStats.PlayerImage; _healthRemainder = _health;
+    }
     #endregion
 
     #region Unity's Methods
@@ -40,11 +44,12 @@ namespace SOG.Player
     private void OnEnable(){
       PlayButtonPressedEvent.OnPlayButtonPressedEvent += onPlayButtonPressedEventHandler;
       GameStateEvents.OnGameStateChanged += OnGameStateChangedEventHandler;
+      PlayerStatsChanged.PlayerStatsCahngedEvent += changePlayerStats;
     }
     private void OnDisable(){
       PlayButtonPressedEvent.OnPlayButtonPressedEvent -= onPlayButtonPressedEventHandler;
       GameStateEvents.OnGameStateChanged -= OnGameStateChangedEventHandler;
-
+      PlayerStatsChanged.PlayerStatsCahngedEvent -= changePlayerStats;
     }
     #endregion
   }

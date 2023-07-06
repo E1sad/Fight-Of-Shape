@@ -28,7 +28,7 @@ namespace SOG.UI.Shop{
 
     #region Unity's Methods
     private void Start(){
-      _coin = 0; //Temporary. It should change when save system is implemented.
+      SetCoin(9999); //Temporary. It should change when save system is implemented.
     }
     private void OnEnable(){
       ShopButtonPressedEvent.EventShopButtonPressed += shopButtonPressedEventHandler;

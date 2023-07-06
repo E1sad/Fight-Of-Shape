@@ -1,6 +1,9 @@
+using SOG.Bullet;
 using SOG.Game_Manager;
+using SOG.Player;
 using SOG.UI.GameOver;
 using SOG.UI.MainMenu;
+using SOG.UI.Shop;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +31,8 @@ namespace SOG.Enemy
     private List<GameObject> _sendedEnemiesList;
     private IEnumerator _instantiateEnemies;
     private Coroutine _routineSendEnemise;
-    private int _hardnessCounter;
+    private int _temporaryHardnessCounter;
+    private int _permanentHardnessCounter;
 
     #region My Methods
     private IEnumerator instantiateEnemies(){
@@ -45,32 +49,30 @@ namespace SOG.Enemy
     }
     private IEnumerator sendEnemies()
     {while (_gameStatePlay){
-        yield return new WaitForSeconds(_frequency-(float)((_hardnessCounter/10)*0.1));
+        yield return new WaitForSeconds(_frequency-(float)((_temporaryHardnessCounter/10)*0.1)-(float)(_permanentHardnessCounter*0.03));
         GameObject selectedEnemy = null;
         int selectedCornerNumber = 0;
         int random = _random.Next(0, 100);
-/*        Debug.Log(random);
-        Debug.Log($"Hexagon chance: {_hexagonChance + (_hardnessCounter / 5)}");
-        Debug.Log($"Pentagon chance: {_pentagonChance + (_hardnessCounter / 5)}");
-        Debug.Log($"Square chance: {_squareChance + (_hardnessCounter / 5)}");
-        Debug.Log($"Triangle chance: {_triangleChance + (_hardnessCounter / 5)}");
-        Debug.Log($"Circle chance: {100 - (_triangleChance+ (_hardnessCounter / 5))}");*/
-        if (random < _hexagonChance + (_hardnessCounter / 5)) selectedCornerNumber = 6;
-        else if (random>=_hexagonChance+(_hardnessCounter/5)&&random<_pentagonChance+(_hardnessCounter/5))
+        if (random < _hexagonChance + (_temporaryHardnessCounter / 5) + _permanentHardnessCounter) 
+          selectedCornerNumber = 6;
+        else if (random>=_hexagonChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter && 
+          random<_pentagonChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter)
           selectedCornerNumber = 5;
-        else if (random>=_pentagonChance+(_hardnessCounter/5)&&random<_squareChance+(_hardnessCounter/5))
+        else if (random>=_pentagonChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter &&
+          random<_squareChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter)
           selectedCornerNumber = 4;
-        else if (random>=_squareChance+(_hardnessCounter/5)&&random<_triangleChance+(_hardnessCounter/5))
+        else if (random>=_squareChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter &&
+          random<_triangleChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter)
           selectedCornerNumber = 3;
         else selectedCornerNumber = 0;
         for (int i = 0; i < _sendableEnemiesList.Count; i++){
           if (_sendableEnemiesList[i].GetComponent<EnemyStats>().Corner == selectedCornerNumber)
           { selectedEnemy = _sendableEnemiesList[i]; _sendableEnemiesList.RemoveAt(i); break;}}
         if (selectedEnemy == null) continue;
-        selectedEnemy.GetComponent<EnemyMovement>().SetHardness(_hardnessCounter / 10);
+        selectedEnemy.GetComponent<EnemyMovement>().SetHardness(_temporaryHardnessCounter / 10);
         selectedEnemy.transform.position = _locations[_random.Next(0, 3)];
         selectedEnemy.SetActive(true);
-        _hardnessCounter++;
+        _temporaryHardnessCounter++;
         _sendedEnemiesList.Add(selectedEnemy);}
     }
     private void destroyed(EnemyStats enemy){
@@ -100,7 +102,7 @@ namespace SOG.Enemy
     }
     private void restartAndIdleState(){
       _gameStatePlay = false; stopSendEnemiesCoroutine();
-      _hardnessCounter = 0;
+      _temporaryHardnessCounter = 0;
       for (int i = 0; i < _enemiesList.Count; i++){ 
         _enemiesList[i].GetComponent<EnemyMovement>().EnemyRb.bodyType = RigidbodyType2D.Dynamic;
         _enemiesList[i].GetComponent<EnemyMovement>().SetIsGamePlayState(true);
@@ -121,29 +123,39 @@ namespace SOG.Enemy
       if (_routineSendEnemise != null) StopCoroutine(_routineSendEnemise);
       _routineSendEnemise = null;
     }
-    #endregion
+    private void playerStatsChangedEventHandler(PlayerScriptableObject playerStats) {
+      _permanentHardnessCounter += 3;
+    }
+    private void bulletShapeChangedEventHandler(BulletScriptableObject newShape){
+      _permanentHardnessCounter += 3; 
+    }
+    private void criticalBulletChanceEventHandler(int chance){
+      _permanentHardnessCounter += 3;
+    }
+      #endregion
 
-    #region Unity's Methods
-    private void Start(){
+      #region Unity's Methods
+      private void Start(){
       _random = new System.Random();
       _sendableEnemiesList = new List<GameObject>();
       _sendedEnemiesList = new List<GameObject>();
       _enemiesList = new List<GameObject>();
       _instantiateEnemies = instantiateEnemies();
       StartCoroutine(_instantiateEnemies);
-      _hardnessCounter = 0;
+      _temporaryHardnessCounter = 0;
+      _permanentHardnessCounter = 0; //Temporary. Should change when save system is implemented
     }
     private void OnEnable(){
       GameStateEvents.OnGameStateChanged += gameStateHandler;
       DestroyEnemyEvent.EventDestroyEnemy += DestroyEnemeyEventHandler;
-      //GameOverEvent.EventGameOver += pauseState;
-      //PlayButtonPressedEvent.OnPlayButtonPressedEvent += gamePlayState;
+      PlayerStatsChanged.PlayerStatsCahngedEvent += playerStatsChangedEventHandler;
+      BulletShapeChanged.BulletShapeChangedEvent += bulletShapeChangedEventHandler;
+      CriticalBulletChance.CriticalBulletChanceEvent += criticalBulletChanceEventHandler;
     }
     private void OnDisable(){
       GameStateEvents.OnGameStateChanged -= gameStateHandler;
       DestroyEnemyEvent.EventDestroyEnemy -= DestroyEnemeyEventHandler;
-      //GameOverEvent.EventGameOver += pauseState;
-      //PlayButtonPressedEvent.OnPlayButtonPressedEvent -= gamePlayState;
+      PlayerStatsChanged.PlayerStatsCahngedEvent -= playerStatsChangedEventHandler;
     }
     #endregion
   }

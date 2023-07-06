@@ -1,4 +1,5 @@
 using SOG.Game_Manager;
+using SOG.UI.Shop;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace SOG.Bullet{
     private List<GameObject> _bulletList;
     private IEnumerator _instantiateBullets;
     private System.Random random;
+    [SerializeField] private Sprite _bulletShape; // Temporary SerializeField, Till Save Sytem implemented 
 
     #region My Methods
     private IEnumerator InstantiateBullets(){
@@ -29,6 +31,7 @@ namespace SOG.Bullet{
         GameObject bullet = Instantiate(_bullet,transform);
         bullet.SetActive(false);
         bullet.GetComponent<Bullet>().SetIsGamePlayState(true);
+        bullet.GetComponent<SpriteRenderer>().sprite = _bulletShape;
         _throwableBulletList.Add(bullet);
         _bulletList.Add(bullet);
         yield return new WaitForSeconds(0.1f);}
@@ -87,6 +90,12 @@ namespace SOG.Bullet{
     private void destroyBulletEventHandler(object sender, DestroyBulletEventArgs eventArgs){
       Destroyed(eventArgs.ThisBullet);
     }
+    private void bulletShapeChangedEventHandler(BulletScriptableObject newShape) {
+      _ordinaryDamage = newShape.Damage; _bulletShape = newShape.BulletShape;
+      for (int i = 0; i < _bulletList.Count; i++){
+        _bulletList[i].GetComponent<SpriteRenderer>().sprite = _bulletShape;}
+    }
+    private void criticalBulletChanceEventHandler(int chance) { _criticalBulletRandomRange = chance; }
     #endregion
 
     #region Unity's Methods
@@ -102,11 +111,15 @@ namespace SOG.Bullet{
       GameStateEvents.OnGameStateChanged += gameStateEventHandler;
       SpawnBulletEvent.EventSpawnBullet += spawnBulletEventHandler;
       DestroyBulletEvent.EventDestroyBullet += destroyBulletEventHandler;
+      BulletShapeChanged.BulletShapeChangedEvent += bulletShapeChangedEventHandler;
+      CriticalBulletChance.CriticalBulletChanceEvent += criticalBulletChanceEventHandler;
     }
     private void OnDisable(){
       GameStateEvents.OnGameStateChanged -= gameStateEventHandler;
       SpawnBulletEvent.EventSpawnBullet -= spawnBulletEventHandler;
       DestroyBulletEvent.EventDestroyBullet -= destroyBulletEventHandler;
+      BulletShapeChanged.BulletShapeChangedEvent -= bulletShapeChangedEventHandler;
+      CriticalBulletChance.CriticalBulletChanceEvent -= criticalBulletChanceEventHandler;
     }
     #endregion
   }

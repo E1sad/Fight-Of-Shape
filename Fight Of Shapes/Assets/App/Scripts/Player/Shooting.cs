@@ -1,5 +1,6 @@
 using SOG.Bullet;
 using SOG.Game_Manager;
+using SOG.UI.Shop;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace SOG.Player
   public class Shooting : MonoBehaviour
   {
     [Header("Variables")]
-    [SerializeField] private float _ShootingFrequency;
+    [SerializeField] private float _shootingFrequency;
 
     [Header("Links")]
     [SerializeField] private Movement _playerMovement;
@@ -32,7 +33,7 @@ namespace SOG.Player
     private IEnumerator shootingCoroutine(){
       while (_isGamePlayState){
         startReloadRoutine();
-        yield return new WaitForSeconds(_ShootingFrequency);
+        yield return new WaitForSeconds(_shootingFrequency);
         SpawnBulletEvent.Raise(this,
           new SpawnBulletEventArgs(fromLocationToVector(_playerMovement._playerLocation), Quaternion.identity));
         stopReloadRoutine();}
@@ -40,8 +41,8 @@ namespace SOG.Player
     private IEnumerator reloadRoutine() {
       float elapsed = 0f;
       _reloadImage.fillAmount = 0;
-      while(elapsed < _ShootingFrequency) {
-        _reloadImage.fillAmount = elapsed / _ShootingFrequency;
+      while(elapsed < _shootingFrequency) {
+        _reloadImage.fillAmount = elapsed / _shootingFrequency;
         elapsed += Time.deltaTime;
         yield return null;}
     }
@@ -70,14 +71,19 @@ namespace SOG.Player
     private void stopReloadRoutine() { 
       if (_reloadRoutine != null) StopCoroutine(_reloadRoutine); _reloadRoutine = null;
     }
+    private void changePlayerStats(PlayerScriptableObject newStats){
+      _shootingFrequency = newStats.frequency;
+    }
     #endregion
 
     #region Unity's Methods
     private void OnEnable(){
       GameStateEvents.OnGameStateChanged += gameStateHandler;
+      PlayerStatsChanged.PlayerStatsCahngedEvent += changePlayerStats;
     }
     private void OnDisable(){
       GameStateEvents.OnGameStateChanged -= gameStateHandler;
+      PlayerStatsChanged.PlayerStatsCahngedEvent -= changePlayerStats;
     }
     #endregion
   }
