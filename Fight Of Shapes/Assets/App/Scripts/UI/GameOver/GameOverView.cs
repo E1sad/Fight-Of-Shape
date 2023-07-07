@@ -8,6 +8,7 @@ namespace SOG.UI.GameOver
     [Header("Variables")]
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private TMP_Text _bestScoreText;
+    [SerializeField] private AudioClip _buttonClip;
 
     [Header("Links")]
     [SerializeField] private GameOverController controller;
@@ -17,10 +18,18 @@ namespace SOG.UI.GameOver
     private int _bestScore;
 
     #region My Methods
-    public void OnSettingsButtonPressed(){controller.SettingsButtonPressed();}
-    public void OnRestartButtonPressed(){controller.RestartButtonPressed();}
-    public void OnShopMenuButtonPressed(){ controller.OnShopMenuButtonPressed(); }
-    public void OnMainMenuButtonPressed(){controller.MainMenuButtonPressed();}
+    public void OnSettingsButtonPressed(){
+      controller.SettingsButtonPressed(); Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
+    }
+    public void OnRestartButtonPressed(){
+      controller.RestartButtonPressed(); Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
+    }
+    public void OnShopMenuButtonPressed(){ 
+      controller.OnShopMenuButtonPressed(); Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
+    }
+    public void OnMainMenuButtonPressed(){
+      controller.MainMenuButtonPressed(); Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
+    }
     public void AddScore(int score){
       if ((_score + score) <= 0) _score = 0; else _score += score;
       _scoreText.text = Convert.ToString(_score);

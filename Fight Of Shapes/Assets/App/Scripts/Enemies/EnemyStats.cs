@@ -16,6 +16,7 @@ namespace SOG.Enemy
     [SerializeField] private int _punishScorePointOfEnemy;
     [SerializeField] private float _duration;
     [SerializeField] private float _magnitude;
+    [SerializeField] private AudioClip _deathClip;
 
     [Header("Links")]
     [SerializeField] private Slider _healthBar;
@@ -28,7 +29,8 @@ namespace SOG.Enemy
     public void damage(int damageOfHit){
       SpawnDamageFeedbackEvent.Raise(this,new SpawnDamageFeedbackEventArgs(transform.position,damageOfHit,_corner));
       if (_health - damageOfHit <= 0){
-        _healthBar.value = 0; UI.GamePlay.AddScoreEvent.Raise(_scorePointOfEnemy); dead();}
+        _healthBar.value = 0; UI.GamePlay.AddScoreEvent.Raise(_scorePointOfEnemy);
+        Audio_Manager.AudioManager.Instance.PlaySoundClip(_deathClip); dead();}
       else { _health -= damageOfHit; StartCoroutine(ShakeEnemy()); }
       _healthBar.value = (float)_health/ _healthRemainder;
     }

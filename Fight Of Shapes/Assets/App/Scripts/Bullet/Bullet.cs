@@ -9,6 +9,7 @@ namespace SOG.Bullet
   {
     [Header("Variables")]
     [SerializeField] private float _speed;
+    [SerializeField] private AudioClip _hitClip;
 
     [Header("Links")]
     [SerializeField] private Rigidbody2D _bulletRb;
@@ -38,6 +39,7 @@ namespace SOG.Bullet
     private void OnCollisionEnter2D(Collision2D collision){
       if (collision.gameObject.CompareTag("Enemy")) {
         collision.gameObject.GetComponent<EnemyStats>().damage(_damage);
+        Audio_Manager.AudioManager.Instance.PlaySoundClip(_hitClip);
         DestroyBulletEvent.Raise(this, new DestroyBulletEventArgs(this));}
       if(collision.gameObject.CompareTag("Boundary")){
         DestroyBulletEvent.Raise(this, new DestroyBulletEventArgs(this));}

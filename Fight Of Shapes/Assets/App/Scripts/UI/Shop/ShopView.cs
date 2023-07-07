@@ -20,7 +20,8 @@ namespace SOG.UI.Shop{
     [SerializeField] private int[] _bulletCriticalChanceUpgrade;
     [SerializeField] private PlayerScriptableObject[] _playerStats;
     [SerializeField] private BulletScriptableObject[] _bulletStats;
-    
+    [SerializeField] private AudioClip _buttonClip;
+
 
     [Header("Links")]
     [SerializeField] private ShopController controller;
@@ -41,7 +42,9 @@ namespace SOG.UI.Shop{
     private string[] _referenceImprovementTexts;
 
     #region My Methods
-    public void OnBackButtonPressed() { controller.OnBackButtonPressed(); }
+    public void OnBackButtonPressed() { 
+      controller.OnBackButtonPressed(); Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
+    }
     public void CoinChangesOnUI(int coin) { _coinText.text = System.Convert.ToString(coin); }
     public void OnFirstUpgradeButtonPressed() {
       _detailsOfUpgrade.text = _descriptions[0]; _nameOfUpgrade.text = "== "+_nameOfUpgrades[0]+" =="; 
@@ -51,7 +54,7 @@ namespace SOG.UI.Shop{
       _improvementText.text = _improoveMentTextFirst[_indexOfUpgradeLevel[0]];
       _referenceImprovementTexts = _improoveMentTextFirst;
       if (_indexOfUpgradeLevel[0] >= 4) { _upgradeButton.interactable = false; _priceOfUpgrade.text = "MAX"; }
-      else _upgradeButton.interactable = true;
+      else _upgradeButton.interactable = true; Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
     }
     public void OnSecondUpgradeButtonPressed(){
       _detailsOfUpgrade.text = _descriptions[1]; _selectedIndex = 1; stopCoroutine();
@@ -61,7 +64,7 @@ namespace SOG.UI.Shop{
       _improvementText.text = _improoveMentTextSecond[_indexOfUpgradeLevel[1]];
       _referenceImprovementTexts = _improoveMentTextSecond;
       if (_indexOfUpgradeLevel[1] >= 4) { _upgradeButton.interactable = false; _priceOfUpgrade.text = "MAX"; }
-      else _upgradeButton.interactable = true;
+      else _upgradeButton.interactable = true; Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
     }
     public void OnThirdUpgradeButtonPressed(){
       _detailsOfUpgrade.text = _descriptions[2]; _selectedIndex = 2; stopCoroutine();
@@ -71,7 +74,7 @@ namespace SOG.UI.Shop{
       _improvementText.text = _improoveMentTextThird[_indexOfUpgradeLevel[2]];
       _referenceImprovementTexts = _improoveMentTextThird;
       if (_indexOfUpgradeLevel[2] >= 4) { _upgradeButton.interactable = false; _priceOfUpgrade.text = "MAX"; }
-      else _upgradeButton.interactable = true;
+      else _upgradeButton.interactable = true; Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
     }
     public void OnUpgradeButtonPressed() {
       if (_selectedIndex > 2) return;
@@ -83,8 +86,8 @@ namespace SOG.UI.Shop{
         _improvementText.text = _referenceImprovementTexts[_indexOfUpgradeLevel[_selectedIndex]];}
       else startCoroutine();
       if (_indexOfUpgradeLevel[_selectedIndex] >= 4){
-        _upgradeButton.interactable = false; _priceOfUpgrade.text = "MAX";
-      }
+        _upgradeButton.interactable = false; _priceOfUpgrade.text = "MAX";}
+      Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
     }
     private IEnumerator notEnoughMoneyText() {
       float elapsed = 0f; setWarningTextAlpha(1);

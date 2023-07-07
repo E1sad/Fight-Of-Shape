@@ -1,3 +1,4 @@
+using SOG.Audio_Manager;
 using System;
 using System.Collections;
 using TMPro;
@@ -9,6 +10,7 @@ namespace SOG.UI.GamePlay
   {
     [Header("Variables")]
     [SerializeField] private float _duration;
+    [SerializeField] private AudioClip _buttonClip;
 
     [Header("Links")]
     [SerializeField] private TMP_Text _scoreText;
@@ -89,6 +91,7 @@ namespace SOG.UI.GamePlay
       stopAddCoroutine(); stopSubtractCoroutine();
       _addedScoreText.GetComponent<TextMeshProUGUI>().alpha = 0;
       _subtractedScoreText.GetComponent<TextMeshProUGUI>().alpha = 0;
+      AudioManager.Instance.PlaySoundClip(_buttonClip);
     }
     #endregion
 

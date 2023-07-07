@@ -12,6 +12,9 @@ namespace SOG.Player
   {
     [Header("Variables")]
     [SerializeField] private int _health;
+    [SerializeField] private AudioClip _damageClip;
+    [SerializeField] private AudioClip _deathClip;
+
     [Header("Links")]
     [SerializeField] private SpriteRenderer _sprite;
 
@@ -23,9 +26,11 @@ namespace SOG.Player
     {
       if ((_health - damageOfHit) <= 0) dead();
       else { _health -= damageOfHit; DamagedPlayerHealhtEvent.Raise(_health);
-        Camera.ShakeCameraEvent.Raise(this, new Camera.CameraShakerEventArg(.2f, .1f));}
+        Camera.ShakeCameraEvent.Raise(this, new Camera.CameraShakerEventArg(.2f, .1f));
+        Audio_Manager.AudioManager.Instance.PlaySoundClip(_damageClip);}
     }
-    private void dead(){ 
+    private void dead(){
+      Audio_Manager.AudioManager.Instance.PlaySoundClip(_deathClip);
       DamagedPlayerHealhtEvent.Raise(0); _health = _healthRemainder; 
       DamagedPlayerHealhtEvent.Raise(_health); }
     private void onPlayButtonPressedEventHandler() { DamagedPlayerHealhtEvent.Raise(_health); }

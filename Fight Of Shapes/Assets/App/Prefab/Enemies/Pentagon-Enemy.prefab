@@ -145,6 +145,7 @@ MonoBehaviour:
   _punishScorePointOfEnemy: -13
   _duration: 0.2
   _magnitude: 0.075
+  _deathClip: {fileID: 8300000, guid: 9f0af4e986ef359418c2eec235e9a8be, type: 3}
   _healthBar: {fileID: 1870325800013930361}
 --- !u!212 &1053416628534207988
 SpriteRenderer:

@@ -30,6 +30,7 @@ namespace SOG.UI.Settings
     private void OnDisable(){
       SettingsButtonPressedEvent.OnSettingsButtonPressedEvent -= SettingsButtonPressedEventHandler;
     }
+    private void Start(){ view.SetIsSoundOn(true); view.SetIsMusicOn(true);}
     #endregion
   }
 }

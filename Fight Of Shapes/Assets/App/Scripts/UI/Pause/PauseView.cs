@@ -9,6 +9,7 @@ namespace SOG.UI.Pause
     [Header("Variables")]
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private TMP_Text _bestScoreText;
+    [SerializeField] private AudioClip _buttonClip;
 
     [Header("Links")]
     [SerializeField] private PauseController controller;
@@ -19,16 +20,16 @@ namespace SOG.UI.Pause
 
     #region My Methods
     public void OnPlayButtonPressed(){
-      controller.PlayButtonPressed();
+      controller.PlayButtonPressed(); Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
     }
     public void OnSettingsButtonPressed(){
-      controller.SettingsButtonPressed();
+      controller.SettingsButtonPressed(); Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
     }
     public void OnRestartButtonPressed(){
-      controller.RestartButtonPressed();
+      controller.RestartButtonPressed(); Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
     }
     public void OnMainMenuButtonPressed(){
-      controller.MainMenuButtonPressed();
+      controller.MainMenuButtonPressed(); Audio_Manager.AudioManager.Instance.PlaySoundClip(_buttonClip);
     }
     public void AddScore(int score) {
       if ((_score + score) <= 0) _score = 0;
