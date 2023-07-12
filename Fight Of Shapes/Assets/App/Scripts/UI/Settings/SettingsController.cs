@@ -1,5 +1,6 @@
 using UnityEngine;
 using SOG.UI.MainMenu;
+using SOG.SaveManager;
 
 namespace SOG.UI.Settings
 {
@@ -21,16 +22,21 @@ namespace SOG.UI.Settings
     private void SettingsButtonPressedEventHandler(bool isFromMenu,bool isFromPause){
       view.gameObject.SetActive(true); _isFromMenu = isFromMenu; _isFromPause = isFromPause;
     }
+    private void sendDataToObjectsEventHandler(int[] upgradeLevel, int bestScore, int money, int HardnessLevel,
+      bool isMusicOn, bool isSoundOn, bool isFirstTime){
+      view.SetIsSoundOn(isSoundOn); view.SetIsMusicOn(isMusicOn);
+    }
     #endregion
 
     #region Unity's Methods
     private void OnEnable(){
       SettingsButtonPressedEvent.OnSettingsButtonPressedEvent += SettingsButtonPressedEventHandler;
+      SendDataToObjects.SendDataToObjectsEvent += sendDataToObjectsEventHandler;
     }
     private void OnDisable(){
       SettingsButtonPressedEvent.OnSettingsButtonPressedEvent -= SettingsButtonPressedEventHandler;
+      SendDataToObjects.SendDataToObjectsEvent -= sendDataToObjectsEventHandler;
     }
-    private void Start(){ view.SetIsSoundOn(true); view.SetIsMusicOn(true);}
     #endregion
   }
 }

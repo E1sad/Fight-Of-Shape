@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69ddb6d513dd79c4eb3c8971f1c43480, type: 3}
   m_Name: Square
   m_EditorClassIdentifier: 
+  PlayerType: 2
   PlayerImage: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   Health: 2
   frequency: 1.2

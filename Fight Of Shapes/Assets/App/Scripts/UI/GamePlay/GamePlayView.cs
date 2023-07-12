@@ -66,6 +66,8 @@ namespace SOG.UI.GamePlay
       for(int i = 0; i < health; i++) { _healthImagesReference[i].SetActive(true);}
      }
     public void ChangeHealthImage(PlayerTypeEnum playerType) {
+      if (_healthImagesReference[0] != null){
+        for (int i = 0; i < _healthImagesReference.Length; i++){_healthImagesReference[i].SetActive(false);}}
       switch (playerType){
         case PlayerTypeEnum.CIRCLE: _healthImagesReference = _circleHealthObjects; break;
         case PlayerTypeEnum.HEXAGON: _healthImagesReference = _hexagonHealthObjects; break;

@@ -1,6 +1,7 @@
 using SOG.Bullet;
 using SOG.Game_Manager;
 using SOG.Player;
+using SOG.SaveManager;
 using SOG.UI.GameOver;
 using SOG.UI.MainMenu;
 using SOG.UI.Shop;
@@ -124,18 +125,23 @@ namespace SOG.Enemy
       _routineSendEnemise = null;
     }
     private void playerStatsChangedEventHandler(PlayerScriptableObject playerStats) {
-      _permanentHardnessCounter += 3;
+      _permanentHardnessCounter += 3; SaveHardnessLevel.Raise(this,_permanentHardnessCounter);
     }
     private void bulletShapeChangedEventHandler(BulletScriptableObject newShape){
-      _permanentHardnessCounter += 3; 
+      _permanentHardnessCounter += 3; SaveHardnessLevel.Raise(this, _permanentHardnessCounter);
     }
     private void criticalBulletChanceEventHandler(int chance){
-      _permanentHardnessCounter += 3;
+      _permanentHardnessCounter += 3; SaveHardnessLevel.Raise(this, _permanentHardnessCounter);
     }
-      #endregion
+    private void sendDataToObjectsEventHandler(int[] upgradeLevel, int bestScore, int money, int HardnessLevel,
+      bool isMusicOn, bool isSoundOn, bool isFirstTime)
+    {
+      _permanentHardnessCounter = HardnessLevel;
+    }
+    #endregion
 
-      #region Unity's Methods
-      private void Start(){
+    #region Unity's Methods
+    private void Start(){
       _random = new System.Random();
       _sendableEnemiesList = new List<GameObject>();
       _sendedEnemiesList = new List<GameObject>();
@@ -151,11 +157,15 @@ namespace SOG.Enemy
       PlayerStatsChanged.PlayerStatsCahngedEvent += playerStatsChangedEventHandler;
       BulletShapeChanged.BulletShapeChangedEvent += bulletShapeChangedEventHandler;
       CriticalBulletChance.CriticalBulletChanceEvent += criticalBulletChanceEventHandler;
+      SendDataToObjects.SendDataToObjectsEvent += sendDataToObjectsEventHandler;
     }
     private void OnDisable(){
       GameStateEvents.OnGameStateChanged -= gameStateHandler;
       DestroyEnemyEvent.EventDestroyEnemy -= DestroyEnemeyEventHandler;
       PlayerStatsChanged.PlayerStatsCahngedEvent -= playerStatsChangedEventHandler;
+      BulletShapeChanged.BulletShapeChangedEvent -= bulletShapeChangedEventHandler;
+      CriticalBulletChance.CriticalBulletChanceEvent -= criticalBulletChanceEventHandler;
+      SendDataToObjects.SendDataToObjectsEvent -= sendDataToObjectsEventHandler;
     }
     #endregion
   }

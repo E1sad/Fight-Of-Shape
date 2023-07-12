@@ -19,8 +19,12 @@ namespace SOG.UI.Settings
     private bool _isMusicOn;
 
     #region My Methods
-    public void SetIsSoundOn (bool isOn) { _isSoundOn = isOn; }
-    public void SetIsMusicOn (bool isOn) { _isMusicOn = isOn; }
+    public void SetIsSoundOn (bool isOn) { 
+      _isSoundOn = isOn; _soundOff.gameObject.SetActive(!_isSoundOn);
+    }
+    public void SetIsMusicOn (bool isOn) { 
+      _isMusicOn = isOn; _musicOff.gameObject.SetActive(!_isMusicOn);
+    }
     public void OnBackButtonPressedEvent() { 
       controller.BackButtonPressed(); AudioManager.Instance.PlaySoundClip(_buttonClip); 
     }

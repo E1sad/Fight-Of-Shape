@@ -1,3 +1,4 @@
+using SOG.SaveManager;
 using SOG.UI.GameOver;
 using SOG.UI.GamePlay;
 using SOG.UI.MainMenu;
@@ -35,23 +36,27 @@ namespace SOG.UI.Pause{
     }
     private void addScoreEventHandler(int score){ view.AddScore(score); }
     private void gameOverEventHandler() { view.BestScore(); view.SetScore(0); }
+    private void sendDataToObjectsEventHandler(int[] upgradeLevel, int bestScore, int money, int HardnessLevel,
+      bool isMusicOn, bool isSoundOn, bool isFirstTime){
+      view.SetBestScoer(bestScore);
+    }
     #endregion
 
     #region Unity's Methods
-    private void Start(){
-      view.SetScore(0);
-      view.SetBestScoer(0); //Temporary. When save system implemented, you should change that;
-    }
+    private void Start(){view.SetScore(0);}
     private void OnEnable(){
       SOG.UI.Settings.BackButtonPressedEvent.OnBackButtonPressedEvent += BackButtonPressedEventHandler;
       PauseButtonPressedEvent.OnPauseButtonPressedEvent += OnPauseButtonPressedEventHandler;
       AddScoreEvent.EventAddScore += addScoreEventHandler;
       GameOverEvent.EventGameOver += gameOverEventHandler;
+      SendDataToObjects.SendDataToObjectsEvent += sendDataToObjectsEventHandler;
     }
     private void OnDisable(){
       SOG.UI.Settings.BackButtonPressedEvent.OnBackButtonPressedEvent -= BackButtonPressedEventHandler;
       PauseButtonPressedEvent.OnPauseButtonPressedEvent -= OnPauseButtonPressedEventHandler;
       AddScoreEvent.EventAddScore -= addScoreEventHandler;
+      GameOverEvent.EventGameOver -= gameOverEventHandler;
+      SendDataToObjects.SendDataToObjectsEvent += sendDataToObjectsEventHandler;
     }
     #endregion
   }

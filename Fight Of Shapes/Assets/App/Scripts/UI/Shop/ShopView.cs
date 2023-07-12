@@ -40,6 +40,9 @@ namespace SOG.UI.Shop{
     private int _selectedIndex;
     private Coroutine _routine;
     private string[] _referenceImprovementTexts;
+    [HideInInspector] public int[] BulletCriticalChanceUpgrade { get { return _bulletCriticalChanceUpgrade; }}
+    [HideInInspector] public PlayerScriptableObject[] PlayerStats { get { return _playerStats; } }
+    [HideInInspector] public BulletScriptableObject[] BulletStats { get { return _bulletStats; } }
 
     #region My Methods
     public void OnBackButtonPressed() { 
@@ -107,6 +110,12 @@ namespace SOG.UI.Shop{
         case 1: PlayerStatsChanged.Raise(_playerStats[_indexOfUpgradeLevel[1]]); break;
         case 2: BulletShapeChanged.Raise(_bulletStats[_indexOfUpgradeLevel[2]]); break; 
         default: break;}
+    }
+    public void SetIndexOfUpgradeLevel(int[] indexOfUpgradeLevel) { 
+      _indexOfUpgradeLevel = indexOfUpgradeLevel;
+      controller.SendUpgradeEvents(0, _indexOfUpgradeLevel);
+      controller.SendUpgradeEvents(1, _indexOfUpgradeLevel);
+      controller.SendUpgradeEvents(2, _indexOfUpgradeLevel);
     }
     #endregion
 

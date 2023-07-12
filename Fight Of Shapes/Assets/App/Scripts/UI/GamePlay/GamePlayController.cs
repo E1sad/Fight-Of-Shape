@@ -1,6 +1,8 @@
+using SOG.Player;
 using SOG.UI.GameOver;
 using SOG.UI.MainMenu;
 using SOG.UI.Pause;
+using SOG.UI.Shop;
 using UnityEngine;
 
 namespace SOG.UI.GamePlay{
@@ -29,6 +31,9 @@ namespace SOG.UI.GamePlay{
     private void onGameStateChangedEventHandler(object sender, Game_Manager.GameStateChangedEvent eventArgs) {
       if(eventArgs.CurrentGameState == GameState.RESTART_STATE) view.SetScore(0);
     }
+    private void PlayerStatsCahngedEventHandler(PlayerScriptableObject playerStats){
+      view.ChangeHealthImage(playerStats.PlayerType); ;
+    }
     #endregion
 
     #region Unity's Methods
@@ -44,6 +49,7 @@ namespace SOG.UI.GamePlay{
       GameOverEvent.EventGameOver += gameOverEventHandler;
       DamagedPlayerHealhtEvent.EventDamagedPlayerHealth += damagedPlayerHealhtEventHandler;
       Game_Manager.GameStateEvents.OnGameStateChanged += onGameStateChangedEventHandler;
+      PlayerStatsChanged.PlayerStatsCahngedEvent += PlayerStatsCahngedEventHandler;
     }
     private void OnDisable(){
       AddScoreEvent.EventAddScore -= addScoreEventHandler;
@@ -53,7 +59,7 @@ namespace SOG.UI.GamePlay{
       GameOverEvent.EventGameOver -= gameOverEventHandler;
       DamagedPlayerHealhtEvent.EventDamagedPlayerHealth -= damagedPlayerHealhtEventHandler;
       Game_Manager.GameStateEvents.OnGameStateChanged -= onGameStateChangedEventHandler;
-
+      PlayerStatsChanged.PlayerStatsCahngedEvent += PlayerStatsCahngedEventHandler;
     }
     #endregion
   }

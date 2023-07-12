@@ -1,9 +1,11 @@
 using SOG.Game_Manager;
+using SOG.SaveManager;
 using SOG.UI.MainMenu;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace SOG.Player
 {
@@ -88,10 +90,10 @@ namespace SOG.Player
       _isGamePlayState = false;
     }
     private void Update(){
+      Swipe();
       if (!_isGamePlayState) return;
       playerMovement();
       move(locations[_indexOfLocations]);
-      Swipe();
     }
     private void OnEnable(){
       GameStateEvents.OnGameStateChanged += gameStateHandler;
