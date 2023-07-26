@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24ba6fcae4505fa4797259482ab877f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 200
+  _speed: 250
   _enemyRb: {fileID: 1053416628534207993}
   _isGamePlayState: 0
 --- !u!114 &1053416628534207990

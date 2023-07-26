@@ -40,8 +40,10 @@ namespace SOG.Bullet
       if (collision.gameObject.CompareTag("Enemy")) {
         collision.gameObject.GetComponent<EnemyStats>().damage(_damage);
         Audio_Manager.AudioManager.Instance.PlaySoundClip(_hitClip);
+        _trailRenderer.Clear();
         DestroyBulletEvent.Raise(this, new DestroyBulletEventArgs(this));}
       if(collision.gameObject.CompareTag("Boundary")){
+        _trailRenderer.Clear();
         DestroyBulletEvent.Raise(this, new DestroyBulletEventArgs(this));}
     }
     #endregion

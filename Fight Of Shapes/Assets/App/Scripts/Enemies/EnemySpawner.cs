@@ -54,15 +54,15 @@ namespace SOG.Enemy
         GameObject selectedEnemy = null;
         int selectedCornerNumber = 0;
         int random = _random.Next(0, 100);
-        if (random < _hexagonChance + (_temporaryHardnessCounter / 5) + _permanentHardnessCounter) 
+        if (random < _hexagonChance + (_temporaryHardnessCounter / 20) + _permanentHardnessCounter) 
           selectedCornerNumber = 6;
-        else if (random>=_hexagonChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter && 
-          random<_pentagonChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter)
+        else if (random>=_hexagonChance+(_temporaryHardnessCounter/20) + _permanentHardnessCounter && 
+          random<_pentagonChance+(_temporaryHardnessCounter/15) + _permanentHardnessCounter)
           selectedCornerNumber = 5;
-        else if (random>=_pentagonChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter &&
-          random<_squareChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter)
+        else if (random>=_pentagonChance+(_temporaryHardnessCounter/15) + _permanentHardnessCounter &&
+          random<_squareChance+(_temporaryHardnessCounter/10) + _permanentHardnessCounter)
           selectedCornerNumber = 4;
-        else if (random>=_squareChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter &&
+        else if (random>=_squareChance+(_temporaryHardnessCounter/10) + _permanentHardnessCounter &&
           random<_triangleChance+(_temporaryHardnessCounter/5) + _permanentHardnessCounter)
           selectedCornerNumber = 3;
         else selectedCornerNumber = 0;
@@ -149,7 +149,7 @@ namespace SOG.Enemy
       _instantiateEnemies = instantiateEnemies();
       StartCoroutine(_instantiateEnemies);
       _temporaryHardnessCounter = 0;
-      _permanentHardnessCounter = 0; //Temporary. Should change when save system is implemented
+      //_permanentHardnessCounter = 0; //Temporary. Should change when save system is implemented
     }
     private void OnEnable(){
       GameStateEvents.OnGameStateChanged += gameStateHandler;

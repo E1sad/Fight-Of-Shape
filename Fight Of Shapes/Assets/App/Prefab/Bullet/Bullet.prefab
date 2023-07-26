@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3b9152ace707b4c9c62dd30ca52f4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 550
+  _speed: 650
   _hitClip: {fileID: 8300000, guid: 75596ea7e7e48d34b8265b56197047b4, type: 3}
   _bulletRb: {fileID: 2709818753168528832}
   _trailRenderer: {fileID: 7616779322643935670}
